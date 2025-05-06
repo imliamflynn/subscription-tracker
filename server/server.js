@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
-const { readFile } = require('fs');
 const fs = require('fs');
 const csv = require('csv-parser');
 const pool = require('./db'); // import the db connection
+const path = require('path');
 
 const app = express();
 const port = 2000;
@@ -16,27 +16,43 @@ app.use(cors());
 const upload = multer({ dest: 'uploads/' });
 
 app.post('/upload', upload.single('csvFile'), (req, res) => {
-    const filePath = req.file.path;
-    const results = [];
+    const filePath = path.join(__dirname, req.file.path);
+    const transactions = [];
 
     fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (data) => results.push(data))
-        .on('end', () => {
-            console.log('Parsed CSV data from:', filePath);
+        .on('data', (row) => transactions.push(row))
+        .on('end', async () => {
+            try {
+                for (const row of transactions) {
+                    const {
+                        Code: code,
+                        Details: details,
+                        Amount: amount,
+                        PaymentType: payment_type,
+                        Date: date
+                    } = row;
 
-            // Optional: delete file after parsing
-            fs.unlinkSync(filePath);
+                    await pool.query(
+                        `INSERT INTO transactions (code, details, amount, payment_type, date, source_file)
+                     VALUES ($1, $2, $3, $4, $5, $6)`,
+                        [
+                            code,
+                            details,
+                            parseFloat(amount),
+                            payment_type,
+                            new Date(date),
+                            req.file.originalname
+                        ]
+                    );
+                }
 
-            res.json({
-                message: 'File uploaded and parsed successfully',
-                rowsParsed: results.length,
-                preview: results.slice(0, 5), // show just first few rows for now
-            });
-        })
-        .on('error', (err) => {
-            console.error('CSV parsing error:', err);
-            res.status(500).json({ error: 'Failed to parse CSV file' });
+                fs.unlinkSync(filePath); // remove uploaded file after processing
+                res.json({ message: 'Transactions inserted into database' });
+            } catch (err) {
+                console.error('Error inserting transactions:', err);
+                res.status(500).json({ error: 'Failed to insert transactions' });
+            }
         });
 });
 
@@ -46,7 +62,7 @@ app.listen(port, () => {
 
 // Displays homepage html at root ('/').
 app.get('/', (request, response) => {
-    readFile('./index.html', 'utf8', (err, html) => {
+    fs.readFile('./index.html', 'utf8', (err, html) => {
         if (err) {
             response.status(500).send('Sorry, out of order.');
         }
