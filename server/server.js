@@ -4,6 +4,7 @@ const multer = require('multer');
 const { readFile } = require('fs');
 const fs = require('fs');
 const csv = require('csv-parser');
+const pool = require('./db'); // import the db connection
 
 const app = express();
 const port = 2000;
