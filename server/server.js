@@ -5,6 +5,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const pool = require('./db'); // import the db connection
 const path = require('path');
+const { parse } = require('date-fns');
 
 const app = express();
 const port = 2000;
@@ -25,11 +26,17 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
         .on('end', async () => {
             try {
                 for (const row of transactions) {
+
+                    //console.log('Raw date:', row.Date);
+                    //console.log('Parsed date:', new Date(row.Date));
+                    //const parsedDate = parse(row.Date, 'dd/MM/yyyy', new Date());
+                    //console.log(parsedDate);
+
                     const {
                         Code: code,
                         Details: details,
                         Amount: amount,
-                        PaymentType: payment_type,
+                        Type: payment_type,
                         Date: date
                     } = row;
 
@@ -41,14 +48,17 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
                             details,
                             parseFloat(amount),
                             payment_type,
-                            new Date(date),
+                            parse(date, 'dd/MM/yyyy', new Date()),
                             req.file.originalname
                         ]
                     );
                 }
 
                 fs.unlinkSync(filePath); // remove uploaded file after processing
-                res.json({ message: 'Transactions inserted into database' });
+                res.json({
+                    message: 'Transactions inserted into database',
+                    rowsInserted: transactions.length
+                });
             } catch (err) {
                 console.error('Error inserting transactions:', err);
                 res.status(500).json({ error: 'Failed to insert transactions' });
