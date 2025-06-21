@@ -79,7 +79,7 @@ function CsvUploadForm() {
 
     return (
         <form onSubmit={handleSubmit} className="csv-form">
-            <h2>Upload CSV File</h2>
+            <h2>Upload Bank Statement</h2>
             <div className="form-group">
                 <label htmlFor="csv-file-input">Choose CSV File:</label>
                 <input

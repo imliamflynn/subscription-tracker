@@ -19,7 +19,7 @@ const upload = multer({ dest: 'uploads/' });
 app.get('/subscriptions', async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT id, vendor, amount, date, details, code FROM transactions WHERE is_subscription = true ORDER BY vendor, date`
+            `SELECT id, vendor, amount, date, details, code, subscription_interval FROM transactions WHERE is_subscription = true ORDER BY vendor, date`
         );
         res.json(result.rows);
     } catch (err) {

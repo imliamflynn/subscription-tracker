@@ -30,6 +30,7 @@ const Subscriptions = () => {
                         <tr>
                             <th>Vendor</th>
                             <th>Amount</th>
+                            <th>Interval</th>
                             <th>Date</th>
                         </tr>
                     </thead>
@@ -38,6 +39,7 @@ const Subscriptions = () => {
                             <tr key={txn.id}>
                                 <td>{txn.vendor}</td>
                                 <td>${txn.amount}</td>
+                                <td>{txn.subscription_interval}</td>
                                 <td>{new Date(txn.date).toLocaleDateString()}</td>
                             </tr>
                         ))}

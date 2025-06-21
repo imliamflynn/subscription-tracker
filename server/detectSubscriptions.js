@@ -17,12 +17,14 @@ async function detectSubscriptions() {
     for (const row of res.rows) {
         const { vendor, rounded_amount, transaction_ids, dates } = row;
 
-        if (isConsistentlyMonthly(dates)) {
-            console.log(`📅 Detected subscription: ${vendor} @ $${rounded_amount}`);
+        const intervalType = getIntervalType(dates);
+
+        if (intervalType) {
+            console.log(`📅 ${intervalType.toUpperCase()} subscription detected: ${vendor} @ $${rounded_amount}`);
 
             await pool.query(
-                `UPDATE transactions SET is_subscription = true WHERE id = ANY($1::int[])`,
-                [transaction_ids]
+                `UPDATE transactions SET is_subscription = true, subscription_interval = $2
+                WHERE id = ANY($1::int[])`, [transaction_ids, intervalType]
             );
         }
     }
@@ -30,8 +32,11 @@ async function detectSubscriptions() {
     console.log('✅ Subscription detection complete.');
 }
 
-function isConsistentlyMonthly(dates) {
-    if (dates.length < 2) return false;
+/**
+ * Given a list of dates, returns 'weekly', 'biweekly', 'monthly', 'yearly', or null.
+ */
+function getIntervalType(dates) {
+    if (dates.length < 2) return null;
 
     const intervals = [];
     for (let i = 1; i < dates.length; i++) {
@@ -39,10 +44,14 @@ function isConsistentlyMonthly(dates) {
         intervals.push(diff);
     }
 
-    const average = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+    const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
 
-    // Allow some tolerance (e.g., 30 ± 3 days)
-    return average >= 27 && average <= 33;
+    if (avg >= 6 && avg <= 8) return 'weekly';
+    if (avg >= 13 && avg <= 15) return 'biweekly';
+    if (avg >= 27 && avg <= 33) return 'monthly';
+    if (avg >= 360 && avg <= 370) return 'yearly';
+
+    return null;
 }
 
 detectSubscriptions().catch(console.error);
