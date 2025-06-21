@@ -2,6 +2,8 @@
 import React from 'react';
 import CsvUploadForm from './components/CsvUploadForm'; // Import the form component
 import './App.css'; // Import basic styling (Vite handles CSS imports)
+import './components/Subscriptions';
+import Subscriptions from './components/Subscriptions';
 
 function App() {
   return (
@@ -11,11 +13,12 @@ function App() {
       </header>
       <main>
         <CsvUploadForm /> {/* Render the form component */}
+        <Subscriptions />
       </main>
       <footer>
         <p>Simple React CSV Upload Demo</p>
       </footer>
-    </div>
+    </div >
   );
 }
 

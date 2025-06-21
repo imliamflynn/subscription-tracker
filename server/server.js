@@ -16,6 +16,18 @@ app.use(cors());
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
 
+app.get('/subscriptions', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT id, vendor, amount, date, details, code FROM transactions WHERE is_subscription = true ORDER BY vendor, date`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching subscriptions:', err);
+        res.status(500).json({ error: 'Failed to fetch subscriptions' });
+    }
+});
+
 app.post('/upload', upload.single('csvFile'), (req, res) => {
     const filePath = path.join(__dirname, req.file.path);
     const transactions = [];
