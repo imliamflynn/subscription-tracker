@@ -8,13 +8,38 @@ const path = require('path');
 const { parse } = require('date-fns');
 
 const app = express();
-const port = 2000;
+app.use(express.json()); // Parse JSON request bodies
+app.use(cors());// Enable CORS for frontend requests
 
-// Enable CORS for frontend requests
-app.use(cors());
+const port = 2000;
 
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
+
+app.post('/feedback', async (req, res) => {
+    const { vendor, amount, interval, isConfirmed } = req.body;
+
+    if (!vendor || !amount || !interval || typeof isConfirmed !== 'boolean') {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+
+    try {
+        await pool.query(
+            `UPDATE transactions
+            SET is_subscription = $1,
+                subscription_interval = CASE WHEN $1 THEN subscription_interval ELSE NULL END
+            WHERE LOWER(vendor) = LOWER($2)
+                AND ROUND(amount::numeric, 2) = ROUND($3::numeric, 2)
+                AND subscription_interval = $4`,
+            [isConfirmed, vendor, amount, interval]
+        );
+
+        res.json({ message: 'Feedback applied to all matching rows' });
+    } catch (err) {
+        console.error('Error applying bulk feedback:', err);
+        res.status(500).json({ error: 'Bulk feedback failed' });
+    }
+});
 
 app.get('/subscriptions', async (req, res) => {
     try {
