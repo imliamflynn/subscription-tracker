@@ -16,6 +16,22 @@ const port = 2000;
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
 
+app.get('/confirmed', async (req, res) => {
+    try {
+        const result = await pool.query(`
+      SELECT vendor, ROUND(amount::numeric, 2) AS amount, subscription_interval, COUNT(*) AS transaction_count
+      FROM transactions
+      WHERE is_subscription = true
+      GROUP BY vendor, amount, subscription_interval
+      ORDER BY vendor
+    `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching confirmed subscriptions:', err);
+        res.status(500).json({ error: 'Failed to fetch confirmed subscriptions' });
+    }
+});
+
 app.post('/feedback', async (req, res) => {
     const { vendor, amount, interval, isConfirmed } = req.body;
 
