@@ -55,9 +55,12 @@ const Subscriptions = () => {
         for (const txn of subs) {
             const key = `${txn.vendor}_${parseFloat(txn.amount).toFixed(2)}_${txn.subscription_interval}`;
 
+            let vendor;
+            if (!txn.code ? vendor = txn.details : vendor = txn.code);
+
             if (!groups[key]) {
                 groups[key] = {
-                    vendor: txn.vendor,
+                    vendor: vendor,
                     amount: parseFloat(txn.amount).toFixed(2),
                     interval: txn.subscription_interval,
                     transactions: [],
