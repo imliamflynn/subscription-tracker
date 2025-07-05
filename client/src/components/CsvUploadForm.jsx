@@ -1,7 +1,7 @@
 // src/components/CsvUploadForm.jsx
 import React, { useState } from 'react';
 
-function CsvUploadForm() {
+function CsvUploadForm({ onUploadSuccess }) {
     // State to store the selected file
     const [selectedFile, setSelectedFile] = useState(null);
     // State to store feedback message
@@ -52,6 +52,11 @@ function CsvUploadForm() {
             const result = await response.json();
             setMessage(result.message || 'Upload complete');
             console.log(result);
+
+            // 🔁 Trigger a re-fetch in the parent dashboard
+            if (typeof onUploadSuccess === 'function') {
+                onUploadSuccess(); // 👈 tell the dashboard to re-fetch
+            }
         } catch (err) {
             console.error(err);
             setMessage('Upload failed');

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CsvUploadForm from './CsvUploadForm';
 import Detected from './DetectedSubscriptions';
 import Confirmed from './ConfirmedSubscriptions';
 import Rejected from './RejectedSubscriptions';
@@ -7,17 +8,21 @@ const SubscriptionsDashboard = () => {
     const [allTransactions, setAllTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetch('http://localhost:2000/subscriptions/all') // 👈 you'll build this
-            .then(res => res.json())
-            .then(data => {
+    const fetchAllTransactions = () => {
+        fetch('http://localhost:2000/subscriptions/all')
+            .then((res) => res.json())
+            .then((data) => {
                 setAllTransactions(data);
                 setLoading(false);
             })
-            .catch(err => {
-                console.error('Failed to fetch all subscriptions:', err);
+            .catch((err) => {
+                console.error('Failed to fetch transactions:', err);
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        fetchAllTransactions();
     }, []);
 
     const updateAfterFeedback = (vendor, amount, interval, isConfirmed) => {
@@ -42,6 +47,10 @@ const SubscriptionsDashboard = () => {
         <p>Loading...</p>
     ) : (
         <>
+            <main>
+                <CsvUploadForm onUploadSuccess={fetchAllTransactions} /> {/* Fetch transactions on upload. */}
+            </main>
+
             <h1>Detected</h1>
             <Detected transactions={detected} onFeedback={updateAfterFeedback} />
 
