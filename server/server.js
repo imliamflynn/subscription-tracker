@@ -6,6 +6,7 @@ const csv = require('csv-parser');
 const pool = require('./db'); // import the db connection
 const path = require('path');
 const { parse } = require('date-fns');
+const detectSubscriptions = require('./detectSubscriptions'); // import the subscription detection logic
 
 const app = express();
 app.use(express.json()); // Parse JSON request bodies
@@ -137,7 +138,11 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
                     );
                 }
 
-                fs.unlinkSync(filePath); // remove uploaded file after processing
+                fs.unlinkSync(filePath); // NOT WORKING - remove uploaded file after processing
+
+                // 🔁 Run subscription detection automatically
+                await detectSubscriptions();
+
                 res.json({
                     message: 'Transactions inserted into database',
                     rowsInserted: transactions.length

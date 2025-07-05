@@ -54,4 +54,11 @@ function getIntervalType(dates) {
     return null;
 }
 
-detectSubscriptions().catch(console.error);
+module.exports = detectSubscriptions;
+
+/*
+// Uncomment to run this script directly
+if (require.main === module) {
+  detectSubscriptions().catch(console.error);
+}
+*/
