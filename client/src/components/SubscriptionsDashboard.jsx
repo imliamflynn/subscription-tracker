@@ -51,13 +51,8 @@ const SubscriptionsDashboard = () => {
                 <CsvUploadForm onUploadSuccess={fetchAllTransactions} /> {/* Fetch transactions on upload. */}
             </main>
 
-            <h1>Detected</h1>
             <Detected transactions={detected} onFeedback={updateAfterFeedback} />
-
-            <h1>Confirmed</h1>
             <Confirmed transactions={confirmed} />
-
-            <h1>Rejected</h1>
             <Rejected transactions={rejected} />
         </>
     );
