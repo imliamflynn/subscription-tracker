@@ -16,6 +16,45 @@ const port = 2000;
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
 
+app.get('/subscriptions/all', async (req, res) => {
+    const result = await pool.query(`
+        SELECT id, vendor, amount, date, details, code, is_subscription, reviewed, subscription_interval
+        FROM transactions
+        WHERE subscription_interval IS NOT NULL
+    `);
+    res.json(result.rows);
+});
+
+app.get('/rejected', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT id, vendor, amount, date, details, code, subscription_interval
+            FROM transactions
+            WHERE is_subscription = false AND reviewed = true
+            ORDER BY vendor, date`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching subscriptions:', err);
+        res.status(500).json({ error: 'Failed to fetch rejected subscriptions' });
+    }
+});
+
+app.get('/confirmed', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT id, vendor, amount, date, details, code, subscription_interval
+            FROM transactions
+            WHERE is_subscription = true AND reviewed = true
+            ORDER BY vendor, date`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching subscriptions:', err);
+        res.status(500).json({ error: 'Failed to fetch subscriptions' });
+    }
+});
+
 app.post('/feedback', async (req, res) => {
     const { vendor, amount, interval, isConfirmed } = req.body;
 
@@ -27,7 +66,8 @@ app.post('/feedback', async (req, res) => {
         await pool.query(
             `UPDATE transactions
             SET is_subscription = $1,
-                subscription_interval = CASE WHEN $1 THEN subscription_interval ELSE NULL END
+                subscription_interval = CASE WHEN $1 THEN subscription_interval ELSE NULL END,
+                reviewed = true
             WHERE LOWER(vendor) = LOWER($2)
                 AND ROUND(amount::numeric, 2) = ROUND($3::numeric, 2)
                 AND subscription_interval = $4`,
@@ -41,10 +81,13 @@ app.post('/feedback', async (req, res) => {
     }
 });
 
-app.get('/subscriptions', async (req, res) => {
+app.get('/detectedsubscriptions', async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT id, vendor, amount, date, details, code, subscription_interval FROM transactions WHERE is_subscription = true ORDER BY vendor, date`
+            `SELECT id, vendor, amount, date, details, code, subscription_interval
+            FROM transactions
+            WHERE is_subscription = true AND reviewed = false
+            ORDER BY vendor, date`
         );
         res.json(result.rows);
     } catch (err) {
