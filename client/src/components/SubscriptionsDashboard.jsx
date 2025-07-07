@@ -14,6 +14,7 @@ const SubscriptionsDashboard = () => {
             .then((data) => {
                 setAllTransactions(data);
                 setLoading(false);
+                console.log('Fetched all transactions:', data);
             })
             .catch((err) => {
                 console.error('Failed to fetch transactions:', err);

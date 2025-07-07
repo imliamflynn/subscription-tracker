@@ -29,7 +29,7 @@ app.get('/subscriptions/all', async (req, res) => {
 app.get('/rejected', async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT id, vendor, amount, date, details, code, subscription_interval
+            `SELECT id, vendor, amount, date, details, code, is_subscription, reviewed, subscription_interval
             FROM transactions
             WHERE is_subscription = false AND reviewed = true
             ORDER BY vendor, date`
@@ -67,7 +67,6 @@ app.post('/feedback', async (req, res) => {
         await pool.query(
             `UPDATE transactions
             SET is_subscription = $1,
-                subscription_interval = CASE WHEN $1 THEN subscription_interval ELSE NULL END,
                 reviewed = true
             WHERE LOWER(vendor) = LOWER($2)
                 AND ROUND(amount::numeric, 2) = ROUND($3::numeric, 2)

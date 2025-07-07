@@ -11,12 +11,15 @@ const RejectedSubscriptions = ({ transactions }) => {
             .then(data => {
                 setConfirmed(data);
                 setLoading(false);
+                console.log('Fetched rejected transactions:', data);
             })
             .catch(err => {
                 console.error('Failed to fetch confirmed subscriptions:', err);
                 setLoading(false);
             });
     }, []);
+
+
 
     function groupSubscriptions(subs) {
         //if (!Array.isArray(subs)) return []; // 👈 prevents crash
