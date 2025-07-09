@@ -14,7 +14,6 @@ const SubscriptionsDashboard = () => {
             .then((data) => {
                 setAllTransactions(data);
                 setLoading(false);
-                //console.log('Fetched all transactions:', data);
             })
             .catch((err) => {
                 console.error('Failed to fetch transactions:', err);
@@ -28,7 +27,6 @@ const SubscriptionsDashboard = () => {
 
     const updateAfterFeedback = (vendor, amount, interval, isConfirmed) => {
         // Remove reviewed group from detected
-        // (optional: add to confirmed/rejected here too if needed)
         setAllTransactions(prev =>
             prev.map((txn) =>
                 txn.vendor === vendor &&

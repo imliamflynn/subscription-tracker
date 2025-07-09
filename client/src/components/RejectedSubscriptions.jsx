@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import groupSubscriptions from '../utils/groupSubscriptions'; // Import the utility function
 
 const RejectedSubscriptions = ({ transactions }) => {
     const [confirmed, setConfirmed] = useState([]);
@@ -11,43 +12,12 @@ const RejectedSubscriptions = ({ transactions }) => {
             .then(data => {
                 setConfirmed(data);
                 setLoading(false);
-                //console.log('Fetched rejected transactions:', data);
             })
             .catch(err => {
                 console.error('Failed to fetch confirmed subscriptions:', err);
                 setLoading(false);
             });
     }, []);
-
-
-
-    function groupSubscriptions(subs) {
-        //if (!Array.isArray(subs)) return []; // 👈 prevents crash
-
-        const groups = {};
-
-        for (const txn of subs) {
-            const key = `${txn.vendor}_${parseFloat(txn.amount).toFixed(2)}_${txn.subscription_interval}`;
-
-            //let vendor;
-            //if (!txn.code ? vendor = txn.details : vendor = txn.code);
-
-            if (!groups[key]) {
-                groups[key] = {
-                    vendor: txn.vendor,
-                    amount: parseFloat(txn.amount).toFixed(2),
-                    interval: txn.subscription_interval,
-                    transactions: [],
-                };
-            }
-
-            groups[key].transactions.push(txn);
-        }
-
-        return Object.values(groups).sort((a, b) =>
-            a.vendor.localeCompare(b.vendor)
-        );
-    }
 
     return (
         <div>
