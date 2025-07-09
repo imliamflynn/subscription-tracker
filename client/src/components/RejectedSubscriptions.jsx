@@ -11,7 +11,7 @@ const RejectedSubscriptions = ({ transactions }) => {
             .then(data => {
                 setConfirmed(data);
                 setLoading(false);
-                console.log('Fetched rejected transactions:', data);
+                //console.log('Fetched rejected transactions:', data);
             })
             .catch(err => {
                 console.error('Failed to fetch confirmed subscriptions:', err);
@@ -44,7 +44,9 @@ const RejectedSubscriptions = ({ transactions }) => {
             groups[key].transactions.push(txn);
         }
 
-        return Object.values(groups);
+        return Object.values(groups).sort((a, b) =>
+            a.vendor.localeCompare(b.vendor)
+        );
     }
 
     return (

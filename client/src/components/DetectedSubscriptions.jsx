@@ -76,7 +76,9 @@ const DetectedSubscriptions = ({ transactions, onFeedback }) => {
             groups[key].transactions.push(txn);
         }
 
-        return Object.values(groups);
+        return Object.values(groups).sort((a, b) =>
+            a.vendor.localeCompare(b.vendor)
+        );
     }
 
     if (loading) return <p>Loading subscriptions...</p>;
