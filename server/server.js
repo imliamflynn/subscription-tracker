@@ -160,10 +160,10 @@ function getVendor(code, details) {
 
     const clean = (str) =>
         str
-            ?.toLowerCase()
+            //?.toLowerCase()
             .replace(cardPattern, '') // remove card number pattern
-            .replace(/[^a-z0-9\s]/gi, '') // remove punctuation
-            .replace(/\s+/g, ' ') // collapse whitespace
+            //.replace(/[^a-z0-9\s]/gi, '') // remove punctuation
+            //.replace(/\s+/g, ' ') // collapse whitespace
             .trim();
 
     const cleanedCode = clean(code);
