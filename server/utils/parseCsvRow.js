@@ -28,19 +28,21 @@ function getVendor(code, details) {
     const clean = (str) =>
         str
             //?.toLowerCase()
-            .replace(cardPattern, '') // remove card number pattern
-            .replace(/^\*+$/, '') // remove strings that are just asterisks
             //.replace(/[^a-z0-9\s]/gi, '') // remove punctuation
             //.replace(/\s+/g, ' ') // collapse whitespace
+            .replace(cardPattern, '') // remove card number pattern
+            .replace(/^\*+$/, '') // remove strings that are just asterisks
+            .replace(/\d+/g, '')
             .trim();
 
     const cleanedCode = clean(code);
     const cleanedDetails = clean(details);
 
-    if (cleanedCode == "transfer") return cleanedCode;
+    if (cleanedCode == "Transfer") return cleanedCode;
+    if (cleanedDetails == "Auto payment") return cleanedCode;
 
     // If details is cleaner (longer and non-junk), prefer it
-    if (cleanedDetails && cleanedDetails.length > 3 && !knownJunk.includes(cleanedDetails)) {
+    if (cleanedDetails && cleanedDetails.length > cleanedCode.length && !knownJunk.includes(cleanedDetails)) {
         return cleanedDetails;
     }
 

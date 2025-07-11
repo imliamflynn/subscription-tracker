@@ -114,16 +114,22 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
         .on('data', (row) => { //transactions.push(row))
             if (!detectedFormat) return;
 
+            let parsed;
             switch (detectedFormat) {
                 case 'ANZ':
-                    transactions.push(parseANZRow(row));
+                    parsed = parseANZRow(row);
                     break;
                 case 'Westpac':
-                    transactions.push(parseWestpacRow(row));
+                    parsed = parseWestpacRow(row);
                     break;
                 default:
                     // you could reject here if unknown format
                     break;
+            }
+
+            // Only include negative transactions
+            if (parsed && parsed.amount < 0) {
+                transactions.push(parsed);
             }
         })
         .on('end', async () => {
