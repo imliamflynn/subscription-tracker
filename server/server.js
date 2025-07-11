@@ -3,10 +3,11 @@ const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
 const csv = require('csv-parser');
-const pool = require('./db'); // import the db connection
+const pool = require('./utils/db'); // import the db connection
 const path = require('path');
-const { parse } = require('date-fns');
-const detectSubscriptions = require('./detectSubscriptions'); // import the subscription detection logic
+const detectSubscriptions = require('./utils/detectSubscriptions'); // import the subscription detection logic
+const detectBank = require('./utils/detectBank'); // import the bank detection utility
+const { parseANZRow, parseWestpacRow } = require('./utils/parseCsvRow'); // import the CSV row parsers
 
 const app = express();
 app.use(express.json()); // Parse JSON request bodies
@@ -99,39 +100,46 @@ app.get('/detectedsubscriptions', async (req, res) => {
 app.post('/upload', upload.single('csvFile'), (req, res) => {
     const filePath = path.join(__dirname, req.file.path);
     const transactions = [];
+    let detectedFormat;
+    let headers = [];
+
 
     fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (row) => transactions.push(row))
+        .on('headers', (cols) => {
+            headers = cols;
+            detectedFormat = detectBank(cols);
+            console.log('Detected bank:', detectedFormat);
+        })
+        .on('data', (row) => { //transactions.push(row))
+            if (!detectedFormat) return;
+
+            switch (detectedFormat) {
+                case 'ANZ':
+                    transactions.push(parseANZRow(row));
+                    break;
+                case 'Westpac':
+                    transactions.push(parseWestpacRow(row));
+                    break;
+                default:
+                    // you could reject here if unknown format
+                    break;
+            }
+        })
         .on('end', async () => {
             try {
                 for (const row of transactions) {
-
-                    //console.log('Raw date:', row.Date);
-                    //console.log('Parsed date:', new Date(row.Date));
-                    //const parsedDate = parse(row.Date, 'dd/MM/yyyy', new Date());
-                    //console.log(parsedDate);
-
-                    const {
-                        Code: code,
-                        Details: details,
-                        Amount: amount,
-                        Type: payment_type,
-                        Date: date
-                    } = row;
-
-                    const vendor = getVendor(code, details);
+                    const { vendor, code, details, amount, date } = row;
 
                     await pool.query(
-                        `INSERT INTO transactions (vendor, code, details, amount, payment_type, date, source_file)
-                     VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+                        `INSERT INTO transactions (vendor, code, details, amount, date, source_file)
+                     VALUES ($1, $2, $3, $4, $5, $6)`,
                         [
                             vendor,
                             code,
                             details,
-                            parseFloat(amount),
-                            payment_type,
-                            parse(date, 'dd/MM/yyyy', new Date()),
+                            amount,
+                            date,
                             req.file.originalname
                         ]
                     );
@@ -152,33 +160,6 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
             }
         });
 });
-
-function getVendor(code, details) {
-    // Remove card number garbage
-    const cardPattern = /^(\d{4}-\*{4}-\*{4}-\d{4})/;
-    const knownJunk = ['df', 'if', 'c']; // anything else you want to filter
-
-    const clean = (str) =>
-        str
-            //?.toLowerCase()
-            .replace(cardPattern, '') // remove card number pattern
-            //.replace(/[^a-z0-9\s]/gi, '') // remove punctuation
-            //.replace(/\s+/g, ' ') // collapse whitespace
-            .trim();
-
-    const cleanedCode = clean(code);
-    const cleanedDetails = clean(details);
-
-    if (cleanedCode == "transfer") return cleanedCode;
-
-    // If details is cleaner (longer and non-junk), prefer it
-    if (cleanedDetails && cleanedDetails.length > 3 && !knownJunk.includes(cleanedDetails)) {
-        return cleanedDetails;
-    }
-
-    // Otherwise fallback to code
-    return cleanedCode;
-}
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
