@@ -46,10 +46,10 @@ function getIntervalType(dates) {
 
   const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
 
-  if (avg >= 6 && avg <= 8) return 'weekly';
-  if (avg >= 13 && avg <= 15) return 'biweekly';
-  if (avg >= 27 && avg <= 33) return 'monthly';
-  if (avg >= 360 && avg <= 370) return 'yearly';
+  if (avg >= 6 && avg <= 8) return 'Weekly';
+  if (avg >= 13 && avg <= 15) return 'Fortnightly';
+  if (avg >= 27 && avg <= 33) return 'Monthly';
+  if (avg >= 360 && avg <= 370) return 'Yearly';
 
   return null;
 }

@@ -1,5 +1,3 @@
-import React from 'react';
-import CsvUploadForm from './components/CsvUploadForm'; // Import the form component
 import './App.css'; // Import basic styling (Vite handles CSS imports)
 import SubscriptionsDashboard from './components/SubscriptionsDashboard';
 

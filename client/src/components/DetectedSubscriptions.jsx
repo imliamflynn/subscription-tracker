@@ -60,7 +60,8 @@ const DetectedSubscriptions = ({ transactions, onFeedback }) => {
                         <div key={groupKey} style={{ border: '1px solid #ccc', marginBottom: '1rem', padding: '1rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <strong>{group.vendor}</strong>
-                                <span>${group.amount} — {group.interval}</span>
+                                <span>${Math.abs(group.amount).toFixed(2)}</span>
+                                <span>{group.interval}</span>
                                 <span>{group.transactions.length} transactions</span>
                                 <div>
                                     <button onClick={() => handleFeedback(group, true)}>👍</button>
