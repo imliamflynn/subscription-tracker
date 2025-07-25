@@ -42,10 +42,10 @@ const SubscriptionSummary = () => {
     };
 
     return (
-        <div className="bg-green-50 border border-green-200 rounded p-4 mb-4 shadow-sm">
-            <h2 className="text-lg font-semibold mb-2">📊 Monthly Subscription Cost</h2>
+        <div>
+            <h2>📊 Monthly Subscription Cost</h2>
             {total !== null ? (
-                <p className="text-xl font-bold text-green-700">${total} per month</p>
+                <p>${total} per month</p>
             ) : (
                 <p>Loading summary...</p>
             )}

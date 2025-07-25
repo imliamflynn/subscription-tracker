@@ -4,6 +4,7 @@ import Detected from './DetectedSubscriptions';
 import Confirmed from './ConfirmedSubscriptions';
 import Rejected from './RejectedSubscriptions';
 import SubscriptionSummary from './SubscriptionSummary';
+import SummaryBreakdown from './SummaryBreakdown';
 
 const SubscriptionsDashboard = () => {
     const [allTransactions, setAllTransactions] = useState([]);
@@ -52,6 +53,7 @@ const SubscriptionsDashboard = () => {
             </main>
 
             <SubscriptionSummary />
+            <SummaryBreakdown />
 
             <Detected transactions={detected} onFeedback={updateAfterFeedback} />
             <Confirmed transactions={confirmed} />
