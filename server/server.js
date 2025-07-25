@@ -18,6 +18,28 @@ const port = 2000;
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
 
+app.get('/subscriptions/monthly-summary', async (req, res) => {
+    try {
+        const result = await pool.query(`
+      SELECT vendor, subscription_interval, ROUND(ABS(SUM(amount)), 2) AS total
+      FROM transactions
+      WHERE is_subscription = true
+        AND (
+          (subscription_interval = 'Weekly'   AND date >= CURRENT_DATE - INTERVAL '7 days') OR
+          (subscription_interval = 'Fortnightly' AND date >= CURRENT_DATE - INTERVAL '14 days') OR
+          (subscription_interval = 'Monthly'  AND date >= CURRENT_DATE - INTERVAL '31 days') OR
+          (subscription_interval = 'Yearly'   AND date >= CURRENT_DATE - INTERVAL '365 days')
+        )
+      GROUP BY vendor, subscription_interval
+    `);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error calculating monthly summary:', err);
+        res.status(500).json({ error: 'Failed to calculate summary' });
+    }
+});
+
 app.get('/subscriptions/all', async (req, res) => {
     const result = await pool.query(`
         SELECT id, vendor, amount, date, details, code, is_subscription, reviewed, subscription_interval

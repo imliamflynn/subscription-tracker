@@ -3,6 +3,7 @@ import CsvUploadForm from './CsvUploadForm';
 import Detected from './DetectedSubscriptions';
 import Confirmed from './ConfirmedSubscriptions';
 import Rejected from './RejectedSubscriptions';
+import SubscriptionSummary from './SubscriptionSummary';
 
 const SubscriptionsDashboard = () => {
     const [allTransactions, setAllTransactions] = useState([]);
@@ -49,6 +50,8 @@ const SubscriptionsDashboard = () => {
             <main>
                 <CsvUploadForm onUploadSuccess={fetchAllTransactions} /> {/* Fetch transactions on upload. */}
             </main>
+
+            <SubscriptionSummary />
 
             <Detected transactions={detected} onFeedback={updateAfterFeedback} />
             <Confirmed transactions={confirmed} />
