@@ -18,7 +18,11 @@ const CategoryChart = ({ data }) => {
         ],
     };
 
-    return <Pie data={chartData} />;
+    return (
+        <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+            <Pie data={chartData} />
+        </div>
+    );
 };
 
 export default CategoryChart;
