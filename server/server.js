@@ -18,17 +18,96 @@ const port = 2000;
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
 
-app.get('/spending-breakdown', async (req, res) => {
+app.post('/hide-vendor', async (req, res) => {
+    const { vendor } = req.body;
+
+    if (!vendor) {
+        return res.status(400).json({ error: 'Vendor is required' });
+    }
+
+    try {
+        await pool.query(
+            `INSERT INTO hidden_vendors (vendor)
+       VALUES ($1)
+       ON CONFLICT (vendor) DO NOTHING`,
+            [vendor.toLowerCase()]
+        );
+
+        res.json({ message: `Vendor "${vendor}" hidden.` });
+    } catch (err) {
+        console.error('Error hiding vendor:', err);
+        res.status(500).json({ error: 'Failed to hide vendor' });
+    }
+});
+
+app.post('/update-category', async (req, res) => {
+    const { vendor, category } = req.body;
+
+    if (!vendor || !category) {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+
+    try {
+        await pool.query(`
+      UPDATE transactions
+      SET category = $1
+      WHERE LOWER(vendor) = LOWER($2)
+    `, [category, vendor]);
+
+        res.json({ message: 'Vendor categorised successfully' });
+    } catch (err) {
+        console.error('Failed to update category:', err);
+        res.status(500).json({ error: 'Failed to update vendor category' });
+    }
+});
+
+app.get('/uncategorised', async (req, res) => {
     try {
         const result = await pool.query(`
-      SELECT category, SUM(amount) AS total
-      FROM transactions
-      WHERE amount < 0
-      GROUP BY category
-      ORDER BY total DESC
-    `);
+            SELECT LOWER(vendor) AS vendor, SUM(amount) AS total_spent
+            FROM transactions
+            WHERE (category IS NULL OR category = 'Other')
+              AND amount < 0
+              AND LOWER(vendor) NOT IN (SELECT LOWER(vendor) FROM hidden_vendors)
+            GROUP BY vendor
+            ORDER BY total_spent ASC
+        `);
 
         res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching uncategorised vendors:', err);
+        res.status(500).json({ error: 'Failed to fetch vendors' });
+    }
+});
+
+app.get('/spending-breakdown', async (req, res) => {
+    try {
+        const hidden = await pool.query(`SELECT vendor FROM hidden_vendors`);
+        const hiddenList = hidden.rows.map((r) => r.vendor);
+
+        const result = await pool.query(`
+      SELECT vendor, category, amount
+      FROM transactions
+      WHERE amount < 0 AND category IS NOT NULL
+    `);
+
+        const filtered = result.rows.filter(row =>
+            !hiddenList.includes(row.vendor?.toLowerCase())
+        );
+
+        const breakdown = {};
+        for (const { category, amount } of filtered) {
+            if (!breakdown[category]) breakdown[category] = 0;
+            breakdown[category] += Math.abs(Number(amount));
+        }
+
+        const summary = Object.entries(breakdown).map(([category, total]) => ({
+            category,
+            total
+        }));
+
+        summary.sort((a, b) => b.total - a.total);
+        res.json(summary);
     } catch (err) {
         console.error('Error generating breakdown:', err);
         res.status(500).json({ error: 'Failed to generate breakdown' });

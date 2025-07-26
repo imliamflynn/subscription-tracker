@@ -12,7 +12,7 @@ const CategoryChart = ({ data }) => {
                 data: data.map((entry) => Math.abs(entry.total)), // use positive values
                 backgroundColor: [
                     '#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0',
-                    '#9966FF', '#FF9F40', '#C9CBCF', '#8AE234'
+                    '#9966FF', '#FF9F40', '#8AE234', '#C9CBCF'
                 ],
             },
         ],

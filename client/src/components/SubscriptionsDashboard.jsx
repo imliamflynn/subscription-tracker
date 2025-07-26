@@ -6,6 +6,7 @@ import Rejected from './RejectedSubscriptions';
 import SubscriptionSummary from './SubscriptionSummary';
 import SummaryBreakdown from './SummaryBreakdown';
 import SpendingDashboard from './SpendingDashboard';
+import VendorCategoriser from './VendorCategoriser';
 
 const SubscriptionsDashboard = () => {
     const [allTransactions, setAllTransactions] = useState([]);
@@ -57,6 +58,7 @@ const SubscriptionsDashboard = () => {
             <SummaryBreakdown />
 
             <SpendingDashboard />
+            <VendorCategoriser />
 
             <Detected transactions={detected} onFeedback={updateAfterFeedback} />
             <Confirmed transactions={confirmed} />
