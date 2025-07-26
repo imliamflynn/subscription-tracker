@@ -18,6 +18,23 @@ const port = 2000;
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
 
+app.get('/spending-breakdown', async (req, res) => {
+    try {
+        const result = await pool.query(`
+      SELECT category, SUM(amount) AS total
+      FROM transactions
+      WHERE amount < 0
+      GROUP BY category
+      ORDER BY total DESC
+    `);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error generating breakdown:', err);
+        res.status(500).json({ error: 'Failed to generate breakdown' });
+    }
+});
+
 app.get('/subscriptions/monthly-summary', async (req, res) => {
     try {
         const result = await pool.query(`
@@ -157,17 +174,18 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
         .on('end', async () => {
             try {
                 for (const row of transactions) {
-                    const { vendor, code, details, amount, date } = row;
+                    const { vendor, code, details, amount, date, category } = row;
 
                     await pool.query(
-                        `INSERT INTO transactions (vendor, code, details, amount, date, source_file)
-                     VALUES ($1, $2, $3, $4, $5, $6)`,
+                        `INSERT INTO transactions (vendor, code, details, amount, date, category, source_file)
+                     VALUES ($1, $2, $3, $4, $5, $6, $7)`,
                         [
                             vendor,
                             code,
                             details,
                             amount,
                             date,
+                            category,
                             req.file.originalname
                         ]
                     );

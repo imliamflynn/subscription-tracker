@@ -1,4 +1,5 @@
 const { parse } = require('date-fns');
+const getCategory = require('./getCategory');
 
 function parseANZRow(row) {
     return {
@@ -7,6 +8,7 @@ function parseANZRow(row) {
         amount: parseFloat(row['Amount']),
         date: parse(row['Date'], 'dd/MM/yyyy', new Date()),
         vendor: getVendor(row['Code'], row['Details']),
+        category: getCategory(getVendor(row['Code'], row['Details'])),
     };
 }
 
@@ -17,6 +19,7 @@ function parseWestpacRow(row) {
         amount: parseFloat(row['Amount']),
         date: parse(row['Date'], 'dd/MM/yyyy', new Date()),
         vendor: getVendor(row['Other Party'], row['Particulars']),
+        category: getCategory(getVendor(row['Other Party'], row['Particulars'])),
     };
 }
 
