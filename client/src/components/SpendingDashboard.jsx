@@ -13,7 +13,7 @@ const SpendingDashboard = () => {
 
     return (
         <div>
-            <h2>Monthly Spending Breakdown</h2>
+            <h2>Spending Breakdown</h2>
             <CategoryChart data={breakdown} />
         </div>
     );
