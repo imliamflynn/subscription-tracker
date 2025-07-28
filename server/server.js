@@ -44,17 +44,26 @@ app.post('/update-category', async (req, res) => {
     const { vendor, category } = req.body;
 
     if (!vendor || !category) {
-        return res.status(400).json({ error: 'Invalid input' });
+        return res.status(400).json({ error: 'Vendor and category are required.' });
     }
 
     try {
+        // Insert or update the vendor-category map
+        await pool.query(`
+      INSERT INTO vendor_category_map (vendor, category)
+      VALUES ($1, $2)
+      ON CONFLICT (vendor)
+      DO UPDATE SET category = EXCLUDED.category
+    `, [vendor.toLowerCase(), category]);
+
+        // Update existing transactions for this vendor
         await pool.query(`
       UPDATE transactions
       SET category = $1
       WHERE LOWER(vendor) = LOWER($2)
     `, [category, vendor]);
 
-        res.json({ message: 'Vendor categorised successfully' });
+        res.json({ message: 'Category updated and stored in vendor_category_map.' });
     } catch (err) {
         console.error('Failed to update category:', err);
         res.status(500).json({ error: 'Failed to update vendor category' });
@@ -253,7 +262,15 @@ app.post('/upload', upload.single('csvFile'), (req, res) => {
         .on('end', async () => {
             try {
                 for (const row of transactions) {
-                    const { vendor, code, details, amount, date, category } = row;
+                    const { vendor, code, details, amount, date/*, category*/ } = row;
+
+                    // Lookup category for the vendor
+                    const categoryResult = await pool.query(
+                        `SELECT category FROM vendor_category_map WHERE LOWER(vendor) = LOWER($1)`,
+                        [vendor]
+                    );
+
+                    const category = categoryResult.rows[0]?.category || null;
 
                     await pool.query(
                         `INSERT INTO transactions (vendor, code, details, amount, date, category, source_file)

@@ -19,8 +19,12 @@ const CategoryChart = ({ data }) => {
     };
 
     return (
-        <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <Pie data={chartData} />
+        <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+            {chartData.length === 0 ? (
+                <p>No categorized spending data yet. Try assigning categories to vendors.</p>
+            ) : (
+                <Pie data={chartData} />
+            )}
         </div>
     );
 };

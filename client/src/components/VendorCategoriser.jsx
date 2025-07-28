@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 const VendorCategoriser = () => {
     const [vendors, setVendors] = useState([]);
     const [categories] = useState([
-        'Groceries', 'Petrol', 'Utilities', 'Entertainment', 'Retail', 'Flights', 'ATM', 'Mechanic', 'Insurance', 'Food', 'Rent', 'Other'
+        'Groceries', 'Petrol', 'Bills', 'Entertainment', 'Retail', 'Flights', 'ATM', 'Mechanic', 'Insurance', 'Food and Drink', 'Rent', 'Friends and Family', 'Other'
     ]);
 
     useEffect(() => {
