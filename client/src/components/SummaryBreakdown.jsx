@@ -12,7 +12,7 @@ const intervalToMonthly = (interval, amount) => {
     }
 };
 
-const SummaryBreakdown = () => {
+const SummaryBreakdown = ({ refresh }) => {
     const [subs, setSubs] = useState([]);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const SummaryBreakdown = () => {
             .then(res => res.json())
             .then(setSubs)
             .catch(console.error);
-    }, []);
+    }, [refresh]);
 
     const totalMonthly = subs.reduce((acc, sub) => {
         return acc + intervalToMonthly(sub.subscription_interval, sub.total);

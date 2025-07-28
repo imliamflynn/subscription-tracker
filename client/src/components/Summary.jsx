@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const SubscriptionSummary = () => {
+const Summary = ({ refresh }) => {
     const [subscriptions, setSubscriptions] = useState([]);
     const [total, setTotal] = useState(null);
 
@@ -12,7 +12,7 @@ const SubscriptionSummary = () => {
                 setTotal(calculateMonthlyTotal(data));
             })
             .catch(err => console.error('Error fetching summary:', err));
-    }, []);
+    }, [refresh]);
 
     const calculateMonthlyTotal = (subs) => {
         let total = 0;
@@ -53,4 +53,4 @@ const SubscriptionSummary = () => {
     );
 };
 
-export default SubscriptionSummary;
+export default Summary;

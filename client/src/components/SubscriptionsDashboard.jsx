@@ -3,7 +3,7 @@ import CsvUploadForm from './CsvUploadForm';
 import Detected from './DetectedSubscriptions';
 import Confirmed from './ConfirmedSubscriptions';
 import Rejected from './RejectedSubscriptions';
-import SubscriptionSummary from './SubscriptionSummary';
+import Summary from './Summary';
 import SummaryBreakdown from './SummaryBreakdown';
 import SpendingDashboard from './SpendingDashboard';
 import VendorCategoriser from './VendorCategoriser';
@@ -11,8 +11,11 @@ import VendorCategoriser from './VendorCategoriser';
 const SubscriptionsDashboard = () => {
     const [allTransactions, setAllTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [refreshFlag, setRefreshFlag] = useState(false);
 
     const fetchAllTransactions = () => {
+        setRefreshFlag(prev => !prev);
+
         fetch('http://localhost:2000/subscriptions/all')
             .then((res) => res.json())
             .then((data) => {
@@ -54,11 +57,11 @@ const SubscriptionsDashboard = () => {
                 <CsvUploadForm onUploadSuccess={fetchAllTransactions} /> {/* Fetch transactions on upload. */}
             </main>
 
-            <SubscriptionSummary />
-            <SummaryBreakdown />
+            <Summary refresh={refreshFlag} />
+            <SummaryBreakdown refresh={refreshFlag} />
 
-            <SpendingDashboard />
-            <VendorCategoriser />
+            <SpendingDashboard refresh={refreshFlag} />
+            <VendorCategoriser refresh={refreshFlag} />
 
             <Detected transactions={detected} onFeedback={updateAfterFeedback} />
             <Confirmed transactions={confirmed} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const VendorCategoriser = () => {
+const VendorCategoriser = ({ refresh }) => {
     const [vendors, setVendors] = useState([]);
     const [categories] = useState([
         'Groceries', 'Petrol', 'Bills', 'Entertainment', 'Retail', 'Flights', 'ATM', 'Mechanic', 'Insurance', 'Food and Drink', 'Rent', 'Friends and Family', 'Other'
@@ -10,7 +10,7 @@ const VendorCategoriser = () => {
         fetch('http://localhost:2000/uncategorised')
             .then((res) => res.json())
             .then(setVendors);
-    }, []);
+    }, [refresh]);
 
     const handleCategoryChange = async (vendor, category) => {
         await fetch('http://localhost:2000/update-category', {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CategoryChart from './CategoryChart';
 
-const SpendingDashboard = () => {
+const SpendingDashboard = ({ refresh }) => {
     const [breakdown, setBreakdown] = useState([]);
 
     useEffect(() => {
@@ -9,7 +9,7 @@ const SpendingDashboard = () => {
             .then((res) => res.json())
             .then((data) => setBreakdown(data))
             .catch((err) => console.error('Failed to fetch breakdown:', err));
-    }, []);
+    }, [refresh]);
 
     return (
         <div>
