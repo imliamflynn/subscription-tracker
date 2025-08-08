@@ -43,7 +43,7 @@ const Summary = ({ refresh }) => {
 
     return (
         <div>
-            <h2>📊 Monthly Subscription Cost</h2>
+            <h2>Active Subscription Cost Per Month</h2>
             {total !== null ? (
                 <p>${total} per month</p>
             ) : (

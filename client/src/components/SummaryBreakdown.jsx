@@ -28,7 +28,7 @@ const SummaryBreakdown = ({ refresh }) => {
 
     return (
         <div>
-            <h2>🧾 Subscription Breakdown</h2>
+            <h2>Subscription Breakdown</h2>
             <table>
                 <thead>
                     <tr>

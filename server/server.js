@@ -9,14 +9,31 @@ const detectSubscriptions = require('./utils/detectSubscriptions'); // import th
 const detectBank = require('./utils/detectBank'); // import the bank detection utility
 const { parseANZRow, parseWestpacRow } = require('./utils/parseCsvRow'); // import the CSV row parsers
 
+const port = 2000;
+
 const app = express();
 app.use(express.json()); // Parse JSON request bodies
 app.use(cors());// Enable CORS for frontend requests
 
-const port = 2000;
-
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: 'uploads/' });
+
+app.get('/transactions-by-category/:category', async (req, res) => {
+    const { category } = req.params;
+    try {
+        const result = await pool.query(
+            `SELECT id, vendor, amount, date
+             FROM transactions
+             WHERE category = $1
+             ORDER BY date DESC`,
+            [category]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch transactions' });
+    }
+});
 
 app.post('/hide-vendor', async (req, res) => {
     const { vendor } = req.body;
@@ -123,6 +140,7 @@ app.get('/spending-breakdown', async (req, res) => {
     }
 });
 
+// Change intervals once using live data to: 7, 14, 31, 365 respectively.
 app.get('/subscriptions/monthly-summary', async (req, res) => {
     try {
         const result = await pool.query(`
@@ -130,9 +148,9 @@ app.get('/subscriptions/monthly-summary', async (req, res) => {
       FROM transactions
       WHERE is_subscription = true
         AND (
-          (subscription_interval = 'Weekly'   AND date >= CURRENT_DATE - INTERVAL '7 days') OR
-          (subscription_interval = 'Fortnightly' AND date >= CURRENT_DATE - INTERVAL '14 days') OR
-          (subscription_interval = 'Monthly'  AND date >= CURRENT_DATE - INTERVAL '31 days') OR
+          (subscription_interval = 'Weekly'   AND date >= CURRENT_DATE - INTERVAL '10 days') OR
+          (subscription_interval = 'Fortnightly' AND date >= CURRENT_DATE - INTERVAL '20 days') OR
+          (subscription_interval = 'Monthly'  AND date >= CURRENT_DATE - INTERVAL '40 days') OR
           (subscription_interval = 'Yearly'   AND date >= CURRENT_DATE - INTERVAL '365 days')
         )
       GROUP BY vendor, subscription_interval

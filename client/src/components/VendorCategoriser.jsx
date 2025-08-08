@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 const VendorCategoriser = ({ refresh }) => {
     const [vendors, setVendors] = useState([]);
     const [categories] = useState([
-        'Groceries', 'Petrol', 'Bills', 'Entertainment', 'Retail', 'Flights', 'ATM', 'Mechanic', 'Insurance', 'Food and Drink', 'Rent', 'Friends and Family', 'Other'
+        'Groceries', 'Petrol', 'Bills', 'Services', 'Entertainment', 'Retail', 'Flights', 'ATM', 'Mechanic', 'Insurance', 'Food and Drink', 'Rent', 'Friends and Family', 'Other'
     ]);
 
     useEffect(() => {
@@ -43,21 +43,23 @@ const VendorCategoriser = ({ refresh }) => {
     };
 
     return (
-        <div>
-            <h2>Uncategorised Vendors (Highest Spending First)</h2>
-            {vendors.map(({ vendor, total_spent }) => (
-                <div key={vendor}>
-                    <span>{vendor} — ${parseFloat(total_spent).toFixed(2)}</span>
-                    <select onChange={(e) => handleCategoryChange(vendor, e.target.value)}>
-                        <option value="">Select Category</option>
-                        {categories.map((cat) => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                    </select>
-                    <button onClick={() => handleHideVendor(vendor)}>Hide</button>
-                </div>
-            ))}
-        </div>
+        vendors.length > 0 && (
+            <div>
+                <h2>Uncategorised Vendors (Highest Spending First)</h2>
+                {vendors.map(({ vendor, total_spent }) => (
+                    <div key={vendor}>
+                        <span>{vendor} — ${parseFloat(total_spent).toFixed(2)}</span>
+                        <select onChange={(e) => handleCategoryChange(vendor, e.target.value)}>
+                            <option value="">Select Category</option>
+                            {categories.map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                        <button onClick={() => handleHideVendor(vendor)}>Hide</button>
+                    </div>
+                ))}
+            </div>
+        )
     );
 };
 

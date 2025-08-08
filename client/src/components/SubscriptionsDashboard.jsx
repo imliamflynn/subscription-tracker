@@ -4,7 +4,7 @@ import Subscriptions from './Subscriptions';
 import Incorrect from './IncorrectSubscriptions';
 import Summary from './Summary';
 import SummaryBreakdown from './SummaryBreakdown';
-import SpendingDashboard from './SpendingDashboard';
+import SpendingBreakdown from './SpendingBreakdown';
 import VendorCategoriser from './VendorCategoriser';
 
 const SubscriptionsDashboard = () => {
@@ -58,11 +58,11 @@ const SubscriptionsDashboard = () => {
             <Summary refresh={refreshFlag} />
             <SummaryBreakdown refresh={refreshFlag} />
 
-            <SpendingDashboard refresh={refreshFlag} />
-            <VendorCategoriser refresh={refreshFlag} />
-
             <Subscriptions transactions={subscriptions} onFeedback={updateAfterFeedback} />
             <Incorrect transactions={incorrect} onFeedback={updateAfterFeedback} />
+
+            <SpendingBreakdown refresh={refreshFlag} />
+            <VendorCategoriser refresh={refreshFlag} />
         </>
     );
 };
