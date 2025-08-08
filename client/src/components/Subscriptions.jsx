@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import groupSubscriptions from '../utils/groupSubscriptions';
+import handleFeedback from '../utils/handleFeedback';
 
-const ConfirmedSubscriptions = ({ transactions }) => {
-    const [confirmed, setConfirmed] = useState([]);
+
+const Subscriptions = ({ transactions, onFeedback }) => {
+    const [subscriptions, setSubscriptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedGroups, setExpandedGroups] = useState({});
 
     useEffect(() => {
-        fetch('http://localhost:2000/confirmed')
-            .then(res => res.json())
-            .then(data => {
-                setConfirmed(data);
+        fetch('http://localhost:2000/subscriptions')
+            .then((res) => res.json())
+            .then((data) => {
+                setSubscriptions(data);
                 setLoading(false);
             })
-            .catch(err => {
-                console.error('Failed to fetch confirmed subscriptions:', err);
+            .catch((err) => {
+                console.error('Failed to fetch subscriptions:', err);
                 setLoading(false);
             });
     }, []);
 
     return (
         <div>
-            <h2>Confirmed Subscriptions</h2>
+            <h2>Subscriptions</h2>
             {loading ? (
-                <p>Loading confirmed subscriptions...</p>
+                <p>Loading subscriptions...</p>
             ) : groupSubscriptions(transactions).length === 0 ? (
-                <p>No confirmed subscriptions found.</p>
+                <p>No subscriptions found.</p>
             ) : (
                 groupSubscriptions(transactions).map((group) => {
                     const groupKey = `${group.vendor}_${group.amount}_${group.interval}`;
@@ -39,6 +41,7 @@ const ConfirmedSubscriptions = ({ transactions }) => {
                                 <span>{group.interval}</span>
                                 <span>{group.transactions.length} transactions</span>
                                 <div>
+                                    <button onClick={() => handleFeedback(group, false, onFeedback)}>🚫</button>
                                     <button onClick={() =>
                                         setExpandedGroups(prev => ({ ...prev, [groupKey]: !isExpanded }))
                                     }>
@@ -75,4 +78,4 @@ const ConfirmedSubscriptions = ({ transactions }) => {
     );
 };
 
-export default ConfirmedSubscriptions;
+export default Subscriptions;

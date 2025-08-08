@@ -1,4 +1,4 @@
-//import './App.css'; // Import basic styling (Vite handles CSS imports)
+import './App.css'; // Import basic styling (Vite handles CSS imports)
 import SubscriptionsDashboard from './components/SubscriptionsDashboard';
 
 function App() {

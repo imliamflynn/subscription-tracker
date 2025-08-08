@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CsvUploadForm from './CsvUploadForm';
-import Detected from './DetectedSubscriptions';
-import Confirmed from './ConfirmedSubscriptions';
-import Rejected from './RejectedSubscriptions';
+import Subscriptions from './Subscriptions';
+import Incorrect from './IncorrectSubscriptions';
 import Summary from './Summary';
 import SummaryBreakdown from './SummaryBreakdown';
 import SpendingDashboard from './SpendingDashboard';
@@ -39,15 +38,14 @@ const SubscriptionsDashboard = () => {
                 txn.vendor === vendor &&
                     parseFloat(txn.amount).toFixed(2) === parseFloat(amount).toFixed(2) &&
                     txn.subscription_interval === interval
-                    ? { ...txn, is_subscription: isConfirmed, reviewed: true }
+                    ? { ...txn, is_subscription: isConfirmed }
                     : txn
             )
         );
     };
 
-    const detected = allTransactions.filter((t) => t.is_subscription && !t.reviewed);
-    const confirmed = allTransactions.filter((t) => t.is_subscription && t.reviewed);
-    const rejected = allTransactions.filter((t) => !t.is_subscription && t.reviewed);
+    const subscriptions = allTransactions.filter((t) => t.is_subscription);
+    const incorrect = allTransactions.filter((t) => !t.is_subscription);
 
     return loading ? (
         <p>Loading...</p>
@@ -63,9 +61,8 @@ const SubscriptionsDashboard = () => {
             <SpendingDashboard refresh={refreshFlag} />
             <VendorCategoriser refresh={refreshFlag} />
 
-            <Detected transactions={detected} onFeedback={updateAfterFeedback} />
-            <Confirmed transactions={confirmed} />
-            <Rejected transactions={rejected} />
+            <Subscriptions transactions={subscriptions} onFeedback={updateAfterFeedback} />
+            <Incorrect transactions={incorrect} onFeedback={updateAfterFeedback} />
         </>
     );
 };

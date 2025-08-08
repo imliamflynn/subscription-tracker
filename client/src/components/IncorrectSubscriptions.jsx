@@ -1,56 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import groupSubscriptions from '../utils/groupSubscriptions';
+import handleFeedback from '../utils/handleFeedback';
 
-
-const DetectedSubscriptions = ({ transactions, onFeedback }) => {
-    const [subscriptions, setSubscriptions] = useState([]);
+const IncorrectSubscriptions = ({ transactions, onFeedback }) => {
+    const [confirmed, setConfirmed] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedGroups, setExpandedGroups] = useState({});
 
     useEffect(() => {
-        fetch('http://localhost:2000/detectedsubscriptions')
-            .then((res) => res.json())
-            .then((data) => {
-                setSubscriptions(data);
+        fetch('http://localhost:2000/incorrect')
+            .then(res => res.json())
+            .then(data => {
+                setConfirmed(data);
                 setLoading(false);
             })
-            .catch((err) => {
-                console.error('Failed to fetch subscriptions:', err);
+            .catch(err => {
+                console.error('Failed to fetch confirmed subscriptions:', err);
                 setLoading(false);
             });
     }, []);
 
-    const handleFeedback = async (group, isConfirmed) => {
-        try {
-            const response = await fetch('http://localhost:2000/feedback', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    vendor: group.vendor,
-                    amount: group.amount,
-                    interval: group.interval,
-                    isConfirmed
-                }),
-            });
-
-            const result = await response.json();
-            console.log(result.message);
-
-            onFeedback(group.vendor, group.amount, group.interval, isConfirmed);
-        } catch (err) {
-            console.error('Feedback failed:', err);
-        }
-    };
-
-    if (loading) return <p>Loading subscriptions...</p>;
-
     return (
         <div>
-            <h2>Detected Subscriptions</h2>
+            <h2>Incorrect Subscriptions</h2>
             {loading ? (
-                <p>Loading subscriptions...</p>
+                <p>Loading incorrect subscriptions...</p>
             ) : groupSubscriptions(transactions).length === 0 ? (
-                <p>No subscriptions found.</p>
+                <p>No subscriptions have been marked as incorrect.</p>
             ) : (
                 groupSubscriptions(transactions).map((group) => {
                     const groupKey = `${group.vendor}_${group.amount}_${group.interval}`;
@@ -64,8 +40,7 @@ const DetectedSubscriptions = ({ transactions, onFeedback }) => {
                                 <span>{group.interval}</span>
                                 <span>{group.transactions.length} transactions</span>
                                 <div>
-                                    <button onClick={() => handleFeedback(group, true)}>👍</button>
-                                    <button onClick={() => handleFeedback(group, false)}>👎</button>
+                                    <button onClick={() => handleFeedback(group, true, onFeedback)}>✅</button>
                                     <button onClick={() =>
                                         setExpandedGroups(prev => ({ ...prev, [groupKey]: !isExpanded }))
                                     }>
@@ -102,4 +77,4 @@ const DetectedSubscriptions = ({ transactions, onFeedback }) => {
     );
 };
 
-export default DetectedSubscriptions;
+export default IncorrectSubscriptions;
