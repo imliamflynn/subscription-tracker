@@ -42,6 +42,9 @@ const SubscriptionsDashboard = () => {
                     : txn
             )
         );
+
+        // Trigger refresh so dependent components re-fetch
+        setRefreshFlag(prev => !prev);
     };
 
     const subscriptions = allTransactions.filter((t) => t.is_subscription);
@@ -55,14 +58,17 @@ const SubscriptionsDashboard = () => {
                 <CsvUploadForm onUploadSuccess={fetchAllTransactions} /> {/* Fetch transactions on upload. */}
             </main>
 
-            <Summary refresh={refreshFlag} />
-            <SummaryBreakdown refresh={refreshFlag} />
+            {allTransactions.length > 0 && (
+                <>
+                    <SummaryBreakdown refresh={refreshFlag} /> {/*<Summary refresh={refreshFlag} />*/}
 
-            <Subscriptions transactions={subscriptions} onFeedback={updateAfterFeedback} />
-            <Incorrect transactions={incorrect} onFeedback={updateAfterFeedback} />
+                    <Subscriptions transactions={subscriptions} onFeedback={updateAfterFeedback} />
+                    <Incorrect transactions={incorrect} onFeedback={updateAfterFeedback} />
 
-            <SpendingBreakdown refresh={refreshFlag} />
-            <VendorCategoriser refresh={refreshFlag} />
+                    <SpendingBreakdown refresh={refreshFlag} />
+                    <VendorCategoriser refresh={refreshFlag} />
+                </>
+            )}
         </>
     );
 };

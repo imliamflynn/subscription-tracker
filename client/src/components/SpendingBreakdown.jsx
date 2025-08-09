@@ -45,7 +45,7 @@ const SpendingBreakdown = ({ refresh }) => {
                     <ul>
                         {transactions.map((t) => (
                             <li key={t.id} style={{ listStyleType: 'none' }}>
-                                {t.vendor} — ${Math.abs(t.amount).toFixed(2)} - {t.date}
+                                ${Math.abs(t.amount).toFixed(2)} - <strong>{t.vendor}</strong> — {t.date}
                             </li>
                         ))}
                     </ul>

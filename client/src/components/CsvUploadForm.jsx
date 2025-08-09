@@ -14,7 +14,6 @@ function CsvUploadForm({ onUploadSuccess }) {
             // Basic validation for CSV type (can be improved)
             if (file.type === "text/csv" || file.name.endsWith('.csv')) {
                 setSelectedFile(file);
-                setMessage(`Selected file: ${file.name}`);
             } else {
                 setSelectedFile(null); // Reset if not a CSV
                 setMessage('Error: Please select a valid .csv file.');
@@ -64,7 +63,7 @@ function CsvUploadForm({ onUploadSuccess }) {
 
         // Simulate processing delay
         setTimeout(() => {
-            setMessage(`File "${selectedFile.name}" would be processed here.`);
+            setMessage('');
             // Reset after processing simulation (optional for this demo)
             // setSelectedFile(null);
             // document.getElementById('csv-file-input').value = null;
@@ -84,9 +83,9 @@ function CsvUploadForm({ onUploadSuccess }) {
 
     return (
         <form onSubmit={handleSubmit} className="csv-form">
-            <h2>Upload Bank Statement</h2>
+            <h2>Upload a Bank Statement to Start</h2>
             <div className="form-group">
-                <label htmlFor="csv-file-input">Choose CSV File:</label>
+                <label htmlFor="csv-file-input">Choose a CSV File:</label>
                 <input
                     type="file"
                     id="csv-file-input"

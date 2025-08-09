@@ -32,14 +32,23 @@ const PieChart = ({ data, onCategoryClick }) => {
         }
     };
 
+    // Calculate total spent (absolute value)
+    const totalSpent = data.reduce((sum, entry) => sum + Math.abs(entry.total), 0);
+
+
     return (
         <div>
             {chartData.length === 0 ? (
                 <p>No categorized spending data yet. Try assigning categories to vendors.</p>
             ) : (
-                <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                    <Pie data={chartData} options={options} />
-                </div>
+                <>
+                    <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+                        <Pie data={chartData} options={options} />
+                    </div>
+                    <p style={{ marginTop: '10px', fontWeight: 'bold' }}>
+                        Total Spent: ${totalSpent.toFixed(2)}
+                    </p>
+                </>
             )}
         </div>
     );
