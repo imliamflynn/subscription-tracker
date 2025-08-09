@@ -20,12 +20,28 @@ async function detectSubscriptions() {
     const intervalType = getIntervalType(dates);
 
     if (intervalType) {
-      console.log(`📅 ${intervalType.toUpperCase()} subscription detected: ${vendor} @ $${rounded_amount}`);
+      const lastDate = new Date(dates[dates.length - 1]); // most recent payment
+      const daysSinceLast = differenceInDays(new Date(), lastDate);
 
-      await pool.query(
-        `UPDATE transactions SET is_subscription = true, subscription_interval = $2
-                WHERE id = ANY($1::int[])`, [transaction_ids, intervalType]
-      );
+      // Active window rules
+      const activeWindows = {
+        Weekly: 7,
+        Fortnightly: 14,
+        Monthly: 31,
+        Yearly: 365
+      };
+
+      if (daysSinceLast <= activeWindows[intervalType]) {
+        console.log(`📅 ${intervalType.toUpperCase()} subscription detected: ${vendor} @ $${rounded_amount}`);
+
+        await pool.query(
+          `UPDATE transactions
+          SET is_subscription = true, subscription_interval = $2
+          WHERE id = ANY($1::int[])`, [transaction_ids, intervalType]
+        );
+      } else {
+        console.log(`❌ INACTIVE ${intervalType} Subscription skipped: ${vendor}`);
+      }
     }
   }
 

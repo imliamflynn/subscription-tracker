@@ -148,9 +148,9 @@ app.get('/subscriptions/monthly-summary', async (req, res) => {
       FROM transactions
       WHERE is_subscription = true
         AND (
-          (subscription_interval = 'Weekly'   AND date >= CURRENT_DATE - INTERVAL '10 days') OR
-          (subscription_interval = 'Fortnightly' AND date >= CURRENT_DATE - INTERVAL '20 days') OR
-          (subscription_interval = 'Monthly'  AND date >= CURRENT_DATE - INTERVAL '40 days') OR
+          (subscription_interval = 'Weekly'   AND date >= CURRENT_DATE - INTERVAL '7 days') OR
+          (subscription_interval = 'Fortnightly' AND date >= CURRENT_DATE - INTERVAL '14 days') OR
+          (subscription_interval = 'Monthly'  AND date >= CURRENT_DATE - INTERVAL '31 days') OR
           (subscription_interval = 'Yearly'   AND date >= CURRENT_DATE - INTERVAL '365 days')
         )
       GROUP BY vendor, subscription_interval
