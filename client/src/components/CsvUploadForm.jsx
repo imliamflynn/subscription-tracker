@@ -82,31 +82,44 @@ function CsvUploadForm({ onUploadSuccess }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg bg-white px-7 py-9">
-      <h2>Upload a Bank Statement to Start</h2>
-      <div className="form-group">
-        <label htmlFor="csv-file-input">Choose a CSV File:</label>
-        <input
-          type="file"
-          id="csv-file-input"
-          name="csvFile"
-          accept=".csv, text/csv"
-          onChange={handleFileChange}
-          required
-        />
-      </div>
-      <button type="submit" disabled={!selectedFile}>
-        Upload and Process
-      </button>
-      {message && (
-        <p
-          className="message"
-          data-message-type={getMessageType(message)} // Add data attribute
-        >
-          {message}
-        </p>
-      )}
-    </form>
+    <div className="flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-[60%] flex-col rounded-lg bg-white px-4 py-4 shadow-md"
+      >
+        <h2 className="mb-2 text-2xl font-medium">
+          Upload a Bank Statement to Start
+        </h2>
+        <div className="flex w-full flex-col items-center text-left">
+          <label
+            htmlFor="csv-file-input"
+            className="self-start pl-7 text-left font-bold text-[#555]"
+          >
+            Choose a CSV File:
+          </label>
+          <input
+            type="file"
+            id="csv-file-input"
+            name="csvFile"
+            accept=".csv, text/csv"
+            onChange={handleFileChange}
+            required
+            className="w-[95%] cursor-pointer rounded-md border border-gray-200 p-2 file:mr-2 file:cursor-pointer file:rounded-sm file:border-none file:bg-[#61dafb] file:p-2 file:transition-colors file:duration-200 file:ease-in-out hover:file:bg-[#4cafaf] hover:file:text-white"
+          />
+        </div>
+        <button type="submit" disabled={!selectedFile}>
+          Upload and Process
+        </button>
+        {message && (
+          <p
+            className="message"
+            data-message-type={getMessageType(message)} // Add data attribute
+          >
+            {message}
+          </p>
+        )}
+      </form>
+    </div>
   );
 }
 

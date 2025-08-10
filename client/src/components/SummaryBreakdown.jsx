@@ -36,19 +36,19 @@ const SummaryBreakdown = ({ refresh }) => {
       <h2 className="text-center text-2xl font-medium">
         Active Subscription Summary
       </h2>
-      <table className="min-w-[800px] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+      <table className="w-[70%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow shadow-md">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider text-black uppercase">
+            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Vendor
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider text-black uppercase">
+            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Interval
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider text-black uppercase">
+            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Amount
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider text-black uppercase">
+            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Monthly Equivalent
             </th>
           </tr>
@@ -56,7 +56,7 @@ const SummaryBreakdown = ({ refresh }) => {
         <tbody className="divide-y divide-gray-200">
           {subs.map((sub, idx) => (
             <tr key={idx} className="hover:bg-gray-50">
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-black">
+              <td className="px-6 py-4 text-sm whitespace-nowrap">
                 {sub.vendor}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
@@ -79,11 +79,11 @@ const SummaryBreakdown = ({ refresh }) => {
           <tr className="hover:bg-gray-50">
             <td
               colSpan="3"
-              className="px-6 py-4 text-sm font-bold whitespace-nowrap text-black"
+              className="px-6 py-4 text-sm font-bold whitespace-nowrap"
             >
               Total
             </td>
-            <td className="px-6 py-4 text-sm font-bold whitespace-nowrap text-black">
+            <td className="px-6 py-4 text-sm font-bold whitespace-nowrap">
               ${totalMonthly.toFixed(2)}
             </td>
           </tr>
