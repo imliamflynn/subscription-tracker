@@ -3,9 +3,9 @@
 :root {
   /* Remove default Vite variables if they conflict, or integrate them */
   /* Example: font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -39,7 +39,6 @@ body {
   /* Remove default padding if it interferes */
   text-align: center;
 }
-
 
 .App {
   text-align: center;
@@ -135,7 +134,9 @@ button[type="submit"] {
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease;
   margin-top: 10px;
 }
 
@@ -177,25 +178,24 @@ button[type="submit"]:disabled {
 }
 
 .message[data-message-type="error"] {
-  color: #D8000C;
-  background-color: #FFD2D2;
+  color: #d8000c;
+  background-color: #ffd2d2;
 }
 
 .message[data-message-type="success"] {
-  color: #4F8A10;
-  background-color: #DFF2BF;
+  color: #4f8a10;
+  background-color: #dff2bf;
 }
 
 .message[data-message-type="info"] {
-  color: #00529B;
-  background-color: #BDE5F8;
+  color: #00529b;
+  background-color: #bde5f8;
 }
 
 .message[data-message-type="processing"] {
-  color: #9F6000;
-  background-color: #FEEFB3;
+  color: #9f6000;
+  background-color: #feefb3;
 }
-
 
 footer {
   margin-top: 40px;
