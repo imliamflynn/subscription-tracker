@@ -1,5 +1,5 @@
-const pool = require('./db');
-const { differenceInDays } = require('date-fns');
+const pool = require("./db");
+const { differenceInDays } = require("date-fns");
 
 async function detectSubscriptions() {
   const res = await pool.query(`
@@ -28,24 +28,29 @@ async function detectSubscriptions() {
         Weekly: 7,
         Fortnightly: 14,
         Monthly: 31,
-        Yearly: 365
+        Yearly: 365,
       };
 
       if (daysSinceLast <= activeWindows[intervalType]) {
-        console.log(`📅 ${intervalType.toUpperCase()} subscription detected: ${vendor} @ $${rounded_amount}`);
+        console.log(
+          `📅 ${intervalType.toUpperCase()} subscription detected: ${vendor} @ $${rounded_amount}`
+        );
 
         await pool.query(
           `UPDATE transactions
           SET is_subscription = true, subscription_interval = $2
-          WHERE id = ANY($1::int[])`, [transaction_ids, intervalType]
+          WHERE id = ANY($1::int[])`,
+          [transaction_ids, intervalType]
         );
       } else {
-        console.log(`❌ INACTIVE ${intervalType} Subscription skipped: ${vendor}`);
+        console.log(
+          `❌ INACTIVE ${intervalType} Subscription skipped: ${vendor}`
+        );
       }
     }
   }
 
-  console.log('✅ Subscription detection complete.');
+  console.log("✅ Subscription detection complete.");
 }
 
 /**
@@ -62,10 +67,10 @@ function getIntervalType(dates) {
 
   const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
 
-  if (avg >= 6 && avg <= 8) return 'Weekly';
-  if (avg >= 13 && avg <= 15) return 'Fortnightly';
-  if (avg >= 27 && avg <= 33) return 'Monthly';
-  if (avg >= 360 && avg <= 370) return 'Yearly';
+  if (avg >= 6 && avg <= 8) return "Weekly";
+  if (avg >= 13 && avg <= 15) return "Fortnightly";
+  if (avg >= 27 && avg <= 33) return "Monthly";
+  if (avg >= 360 && avg <= 370) return "Yearly";
 
   return null;
 }

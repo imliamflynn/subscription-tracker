@@ -32,23 +32,24 @@ const SummaryBreakdown = ({ refresh }) => {
   }, 0);
 
   return (
-    <div className="mt-3 flex flex-col items-center">
+    <div className="mb-3 flex flex-col items-center">
       <h2 className="text-center text-2xl font-medium">
         Active Subscription Summary
       </h2>
-      <table className="w-[70%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow shadow-md">
+      <table className="w-[70%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+            <th className="w-1/4 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Vendor
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
-              Interval
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+
+            <th className="w-1/4 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Amount
             </th>
-            <th className="px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+            <th className="w-1/4 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+              Interval
+            </th>
+            <th className="w-1/4 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Monthly Equivalent
             </th>
           </tr>
@@ -60,10 +61,10 @@ const SummaryBreakdown = ({ refresh }) => {
                 {sub.vendor}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                {sub.subscription_interval}
+                ${parseFloat(sub.total).toFixed(2)}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                ${parseFloat(sub.total).toFixed(2)}
+                {sub.subscription_interval}
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                 $
