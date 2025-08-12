@@ -37,7 +37,7 @@ const SpendingBreakdown = ({ refresh }) => {
   };
 
   return (
-    <div>
+    <div className="mb-10">
       <h2 className="text-center text-2xl font-medium">Spending Breakdown</h2>
       <PieChart data={data} onCategoryClick={handleCategoryClick} />
 

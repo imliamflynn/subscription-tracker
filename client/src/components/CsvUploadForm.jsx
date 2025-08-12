@@ -57,9 +57,7 @@ function CsvUploadForm({ onUploadSuccess }) {
         onSubmit={handleSubmit}
         className="flex w-[60%] flex-col items-center rounded-lg bg-white px-3 py-3 shadow-md"
       >
-        <h2 className="mb-1 text-2xl font-medium">
-          Upload a Bank Statement to Start
-        </h2>
+        <h2 className="mb-1 text-2xl font-medium">Upload a Bank Statement</h2>
         <div className="flex w-full flex-col items-center text-left">
           <label
             htmlFor="csv-file-input"

@@ -36,7 +36,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
               Interval
             </th>
             <th className="w-1/5 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
-              # of Transactions
+              Transactions
             </th>
             <th className="w-1/5 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Details
@@ -46,11 +46,15 @@ const Subscriptions = ({ transactions, onFeedback }) => {
         <tbody className="divide-y divide-gray-200">
           {loading ? (
             <tr>
-              <td colSpan={5}>Loading subscriptions...</td>
+              <td colSpan={5} className="p-4 text-center align-middle text-sm">
+                Loading subscriptions...
+              </td>
             </tr>
           ) : groupSubscriptions(transactions).length === 0 ? (
             <tr>
-              <td colSpan={5}>No subscriptions found.</td>
+              <td colSpan={5} className="p-4 text-center align-middle text-sm">
+                No subscriptions found.
+              </td>
             </tr>
           ) : (
             groupSubscriptions(transactions).map((group) => {
@@ -72,10 +76,10 @@ const Subscriptions = ({ transactions, onFeedback }) => {
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                       {group.transactions.length} transactions
                     </td>
-                    <td>
+                    <td className="flex items-center p-2">
                       <button
                         onClick={() => handleFeedback(group, false, onFeedback)}
-                        className="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
+                        className="w-2/8 cursor-pointer rounded-md p-2 text-sm font-medium hover:bg-gray-200"
                       >
                         🚫
                       </button>
@@ -86,6 +90,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
                             [groupKey]: !isExpanded,
                           }))
                         }
+                        className="ml-2 w-5/8 cursor-pointer rounded-md border-0 bg-[#61dafb] p-2 text-sm font-medium transition-colors duration-200 ease-in-out hover:bg-[#4cafaf]"
                       >
                         {isExpanded ? "Hide" : "Show"} details
                       </button>
@@ -95,24 +100,28 @@ const Subscriptions = ({ transactions, onFeedback }) => {
                   {isExpanded && (
                     <tr>
                       <td colSpan={5} className="bg-gray-50 p-4">
-                        <table className="w-full border border-gray-200">
+                        <table className="w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white ring ring-gray-200">
                           <thead>
-                            <tr>
-                              <th className="border px-2 py-1">Date</th>
-                              <th className="border px-2 py-1">Details</th>
-                              <th className="border px-2 py-1">Code</th>
+                            <tr className="hover:bg-gray-50">
+                              <th className="w-1/3 px-2 py-1 text-sm">Date</th>
+                              <th className="w-1/3 px-2 py-1 text-sm">
+                                Details
+                              </th>
+                              <th className="w-1/3 px-2 py-1 text-sm">Code</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody className="divide-y divide-gray-200">
                             {group.transactions.map((txn) => (
-                              <tr key={txn.id}>
-                                <td className="border px-2 py-1">
+                              <tr key={txn.id} className="hover:bg-gray-50">
+                                <td className="px-2 py-1 text-sm">
                                   {new Date(txn.date).toLocaleDateString()}
                                 </td>
-                                <td className="border px-2 py-1">
+                                <td className="px-2 py-1 text-sm">
                                   {txn.details}
                                 </td>
-                                <td className="border px-2 py-1">{txn.code}</td>
+                                <td className="px-2 py-1 text-sm">
+                                  {txn.code}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
