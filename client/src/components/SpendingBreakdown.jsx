@@ -43,11 +43,11 @@ const SpendingBreakdown = ({ refresh }) => {
 
       {selectedCategory && (
         <div className="flex w-full flex-col items-center">
-          <h3 className="pt-2 text-center text-lg font-medium">
+          <h2 className="pt-3 text-center text-2xl font-medium">
             {selectedCategory} Transactions
-          </h3>
+          </h2>
           <table className="w-[80%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
-            <thead className="bg-gray-50">
+            <thead className="bg-[#003459] p-5 text-gray-50">
               <tr>
                 <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
                   Vendor

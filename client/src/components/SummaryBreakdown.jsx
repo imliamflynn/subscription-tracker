@@ -37,7 +37,7 @@ const SummaryBreakdown = ({ refresh }) => {
         Active Subscription Summary
       </h2>
       <table className="w-[70%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
-        <thead className="bg-gray-50">
+        <thead className="bg-[#003459] p-5 text-gray-50">
           <tr>
             <th className="w-1/4 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Vendor
@@ -55,40 +55,52 @@ const SummaryBreakdown = ({ refresh }) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {subs.map((sub, idx) => (
-            <tr key={idx} className="hover:bg-gray-50">
-              <td className="px-6 py-4 text-sm whitespace-nowrap">
-                {sub.vendor}
-              </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                ${parseFloat(sub.total).toFixed(2)}
-              </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                {sub.subscription_interval}
-              </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                $
-                {intervalToMonthly(
-                  sub.subscription_interval,
-                  sub.total,
-                ).toFixed(2)}
+          {subs.length === 0 ? (
+            <tr className="hover:bg-gray-50">
+              <td colSpan={4} className="p-4 text-center align-middle text-sm">
+                No subscriptions found.
               </td>
             </tr>
-          ))}
+          ) : (
+            subs.map((sub, idx) => (
+              <tr key={idx} className="hover:bg-gray-50">
+                <td className="px-6 py-4 text-sm whitespace-nowrap">
+                  {sub.vendor}
+                </td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+                  ${parseFloat(sub.total).toFixed(2)}
+                </td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+                  {sub.subscription_interval}
+                </td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+                  $
+                  {intervalToMonthly(
+                    sub.subscription_interval,
+                    sub.total,
+                  ).toFixed(2)}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
-        <tfoot>
-          <tr className="hover:bg-gray-50">
-            <td
-              colSpan="3"
-              className="px-6 py-4 text-sm font-bold whitespace-nowrap"
-            >
-              Total
-            </td>
-            <td className="px-6 py-4 text-sm font-bold whitespace-nowrap">
-              ${totalMonthly.toFixed(2)}
-            </td>
-          </tr>
-        </tfoot>
+        {subs.length === 0 ? (
+          <></>
+        ) : (
+          <tfoot>
+            <tr className="hover:bg-gray-50">
+              <td
+                colSpan="3"
+                className="px-6 py-4 text-sm font-bold whitespace-nowrap"
+              >
+                Total
+              </td>
+              <td className="px-6 py-4 text-sm font-bold whitespace-nowrap">
+                ${totalMonthly.toFixed(2)}
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );

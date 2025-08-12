@@ -24,7 +24,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
     <div className="mb-3 flex flex-col items-center">
       <h2 className="text-center text-2xl font-medium">Subscriptions</h2>
       <table className="w-[70%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
-        <thead className="bg-gray-50">
+        <thead className="bg-[#003459] p-5 text-gray-50">
           <tr>
             <th className="w-1/5 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
               Vendor
@@ -45,13 +45,13 @@ const Subscriptions = ({ transactions, onFeedback }) => {
         </thead>
         <tbody className="divide-y divide-gray-200">
           {loading ? (
-            <tr>
+            <tr className="hover:bg-gray-50">
               <td colSpan={5} className="p-4 text-center align-middle text-sm">
                 Loading subscriptions...
               </td>
             </tr>
           ) : groupSubscriptions(transactions).length === 0 ? (
-            <tr>
+            <tr className="hover:bg-gray-50">
               <td colSpan={5} className="p-4 text-center align-middle text-sm">
                 No subscriptions found.
               </td>
@@ -79,7 +79,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
                     <td className="flex items-center p-2">
                       <button
                         onClick={() => handleFeedback(group, false, onFeedback)}
-                        className="w-2/8 cursor-pointer rounded-md p-2 text-sm font-medium hover:bg-gray-200"
+                        className="w-2/8 cursor-pointer rounded-md p-2 text-sm hover:bg-gray-200"
                       >
                         🚫
                       </button>
@@ -90,7 +90,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
                             [groupKey]: !isExpanded,
                           }))
                         }
-                        className="ml-2 w-5/8 cursor-pointer rounded-md border-0 bg-[#61dafb] p-2 text-sm font-medium transition-colors duration-200 ease-in-out hover:bg-[#4cafaf]"
+                        className="ml-2 w-5/8 cursor-pointer rounded-md border-0 bg-[#61dafb] p-2 text-sm transition-colors duration-200 ease-in-out hover:bg-[#4cafaf]"
                       >
                         {isExpanded ? "Hide" : "Show"} details
                       </button>
@@ -101,8 +101,8 @@ const Subscriptions = ({ transactions, onFeedback }) => {
                     <tr>
                       <td colSpan={5} className="bg-gray-50 p-4">
                         <table className="w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white ring ring-gray-200">
-                          <thead>
-                            <tr className="hover:bg-gray-50">
+                          <thead className="bg-[#003459] p-5 text-gray-50">
+                            <tr>
                               <th className="w-1/3 px-2 py-1 text-sm">Date</th>
                               <th className="w-1/3 px-2 py-1 text-sm">
                                 Details
