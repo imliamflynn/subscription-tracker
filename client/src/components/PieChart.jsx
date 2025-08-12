@@ -45,17 +45,17 @@ const PieChart = ({ data, onCategoryClick }) => {
   );
 
   return (
-    <div className="mb-3">
+    <div className="flex w-full flex-col items-center">
       {chartData.length === 0 ? (
         <p>
           No categorized spending data yet. Try assigning categories to vendors.
         </p>
       ) : (
         <>
-          <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+          <div className="flex w-[400px] justify-center">
             <Pie data={chartData} options={options} />
           </div>
-          <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+          <p className="mt-3 font-bold">
             Total Spent: ${totalSpent.toFixed(2)}
           </p>
         </>

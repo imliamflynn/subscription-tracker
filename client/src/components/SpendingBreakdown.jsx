@@ -37,16 +37,16 @@ const SpendingBreakdown = ({ refresh }) => {
   };
 
   return (
-    <div className="mb-10">
+    <div className="m-auto mb-3 flex w-[70%] flex-col items-center overflow-hidden rounded-lg bg-white p-2 shadow-md">
       <h2 className="text-center text-2xl font-medium">Spending Breakdown</h2>
       <PieChart data={data} onCategoryClick={handleCategoryClick} />
 
       {selectedCategory && (
-        <div className="flex flex-col items-center">
-          <h3 className="text-center text-lg font-medium">
+        <div className="flex w-full flex-col items-center">
+          <h3 className="pt-2 text-center text-lg font-medium">
             {selectedCategory} Transactions
           </h3>
-          <table className="w-[60%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
+          <table className="w-[80%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
             <thead className="bg-gray-50">
               <tr>
                 <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
