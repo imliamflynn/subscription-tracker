@@ -42,16 +42,38 @@ const SpendingBreakdown = ({ refresh }) => {
       <PieChart data={data} onCategoryClick={handleCategoryClick} />
 
       {selectedCategory && (
-        <div>
-          <h3>{selectedCategory} Transactions</h3>
-          <ul>
+        <div className="flex flex-col items-center">
+          <h3 className="text-center text-lg font-medium">
+            {selectedCategory} Transactions
+          </h3>
+          <table className="w-[60%] divide-y divide-gray-200 overflow-hidden rounded-lg bg-white text-left shadow-md">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+                  Vendor
+                </th>
+                <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+                  Amount
+                </th>
+                <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
+                  Date
+                </th>
+              </tr>
+            </thead>
             {transactions.map((t) => (
-              <li key={t.id} style={{ listStyleType: "none" }}>
-                ${Math.abs(t.amount).toFixed(2)} - <strong>{t.vendor}</strong> —{" "}
-                {t.date}
-              </li>
+              <tr className="hover:bg-gray-50">
+                <td className="px-6 py-4 text-sm whitespace-nowrap">
+                  {t.vendor}
+                </td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap">
+                  ${Math.abs(t.amount).toFixed(2)}
+                </td>
+                <td className="px-6 py-4 text-sm whitespace-nowrap">
+                  {t.date}
+                </td>
+              </tr>
             ))}
-          </ul>
+          </table>
         </div>
       )}
     </div>

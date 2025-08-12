@@ -39,7 +39,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
               Transactions
             </th>
             <th className="w-1/5 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
-              Details
+              Remove
             </th>
           </tr>
         </thead>
