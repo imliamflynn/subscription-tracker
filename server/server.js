@@ -5,6 +5,7 @@ const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
 const csv = require("csv-parser");
+const { Pool } = require("pg");
 //const pool = require("./utils/db"); // import the db connection
 require('dotenv').config();
 const pool = new Pool({
