@@ -31,7 +31,7 @@ function CsvUploadForm({ onUploadSuccess }) {
     formData.append("csvFile", selectedFile);
     console.log("File to process:", selectedFile);
     try {
-      const response = await fetch("http://localhost:2000/upload", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
         method: "POST",
         body: formData,
       });

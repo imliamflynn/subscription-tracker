@@ -8,7 +8,7 @@ const IncorrectSubscriptions = ({ transactions, onFeedback }) => {
   const [expandedGroups, setExpandedGroups] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:2000/incorrect")
+    fetch(`${import.meta.env.VITE_API_URL}/incorrect`)
       .then((res) => res.json())
       .then((data) => {
         setConfirmed(data);

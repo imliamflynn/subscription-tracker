@@ -21,7 +21,7 @@ const SummaryBreakdown = ({ refresh }) => {
   const [subs, setSubs] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:2000/subscriptions/monthly-summary")
+    fetch(`${import.meta.env.VITE_API_URL}/subscriptions/monthly-summary`)
       .then((res) => res.json())
       .then(setSubs)
       .catch(console.error);

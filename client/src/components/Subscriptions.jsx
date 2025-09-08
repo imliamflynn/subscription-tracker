@@ -8,7 +8,7 @@ const Subscriptions = ({ transactions, onFeedback }) => {
   const [expandedGroups, setExpandedGroups] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:2000/subscriptions")
+    fetch(`${import.meta.env.VITE_API_URL}/subscriptions`)
       .then((res) => res.json())
       .then((data) => {
         setSubscriptions(data);

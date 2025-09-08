@@ -8,7 +8,7 @@ const SpendingBreakdown = ({ refresh }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:2000/spending-breakdown")
+    fetch(`${import.meta.env.VITE_API_URL}/spending-breakdown`)
       .then((res) => res.json())
       .then((data) => setData(data))
       .catch((err) => console.error("Failed to fetch data:", err));
@@ -24,7 +24,7 @@ const SpendingBreakdown = ({ refresh }) => {
 
     setSelectedCategory(categoryName);
     const res = await fetch(
-      `http://localhost:2000/transactions-by-category/${categoryName}`,
+      `${import.meta.env.VITE_API_URL}/transactions-by-category/${categoryName}`,
     );
     const txns = await res.json();
 

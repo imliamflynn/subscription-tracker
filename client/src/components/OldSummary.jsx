@@ -5,7 +5,7 @@ const Summary = ({ refresh }) => {
   const [total, setTotal] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:2000/subscriptions/monthly-summary")
+    fetch(`${import.meta.env.VITE_API_URL}/subscriptions/monthly-summary`)
       .then((res) => res.json())
       .then((data) => {
         setSubscriptions(data);

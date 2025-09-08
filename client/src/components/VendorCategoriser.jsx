@@ -22,13 +22,13 @@ const VendorCategoriser = ({ refresh, onChange }) => {
   ]);
 
   useEffect(() => {
-    fetch("http://localhost:2000/uncategorised")
+    fetch(`${import.meta.env.VITE_API_URL}/uncategorised`)
       .then((res) => res.json())
       .then(setVendors);
   }, [refresh]);
 
   const handleCategoryChange = async (vendor, category) => {
-    await fetch("http://localhost:2000/update-category", {
+    await fetch(`${import.meta.env.VITE_API_URL}/update-category`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ vendor, category }),
@@ -42,11 +42,14 @@ const VendorCategoriser = ({ refresh, onChange }) => {
 
   const handleHideVendor = async (vendor) => {
     try {
-      const response = await fetch("http://localhost:2000/hide-vendor", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vendor }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/hide-vendor`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vendor }),
+        },
+      );
 
       const result = await response.json();
       console.log(result.message);
