@@ -319,7 +319,8 @@ app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
-// Displays homepage html at root ('/').
+// Displays homepage html at root ('/'). Comment out for AWS.
+/*
 app.get("/", (request, response) => {
   fs.readFile("./index.html", "utf8", (err, html) => {
     if (err) {
@@ -328,3 +329,4 @@ app.get("/", (request, response) => {
     response.send(html);
   });
 });
+*/
