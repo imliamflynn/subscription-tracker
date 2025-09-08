@@ -5,16 +5,7 @@ const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
 const csv = require("csv-parser");
-const { Pool } = require("pg");
-//const pool = require("./utils/db"); // import the db connection
-require('dotenv').config();
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-});
+const pool = require("./utils/db"); // import the db connection
 const path = require("path");
 const detectSubscriptions = require("./utils/detectSubscriptions"); // import the subscription detection logic
 const detectBank = require("./utils/detectBank"); // import the bank detection utility
