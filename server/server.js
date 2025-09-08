@@ -20,7 +20,7 @@ app.use(cors()); // Enable CORS for frontend requests
 // Set up file upload handler (files saved in ./uploads)
 const upload = multer({ dest: "uploads/" });
 
-app.get("/transactions-by-category/:category", async (req, res) => {
+app.get("/api/transactions-by-category/:category", async (req, res) => {
   const { category } = req.params;
   try {
     const result = await pool.query(
@@ -37,7 +37,7 @@ app.get("/transactions-by-category/:category", async (req, res) => {
   }
 });
 
-app.post("/hide-vendor", async (req, res) => {
+app.post("/api/hide-vendor", async (req, res) => {
   const { vendor } = req.body;
 
   if (!vendor) {
@@ -59,7 +59,7 @@ app.post("/hide-vendor", async (req, res) => {
   }
 });
 
-app.post("/update-category", async (req, res) => {
+app.post("/api/update-category", async (req, res) => {
   const { vendor, category } = req.body;
 
   if (!vendor || !category) {
@@ -97,7 +97,7 @@ app.post("/update-category", async (req, res) => {
   }
 });
 
-app.get("/uncategorised", async (req, res) => {
+app.get("/api/uncategorised", async (req, res) => {
   try {
     const result = await pool.query(`
             SELECT vendor, SUM(amount) AS total_spent
@@ -116,7 +116,7 @@ app.get("/uncategorised", async (req, res) => {
   }
 });
 
-app.get("/spending-breakdown", async (req, res) => {
+app.get("/api/spending-breakdown", async (req, res) => {
   try {
     const hidden = await pool.query(`SELECT vendor FROM hidden_vendors`);
     const hiddenList = hidden.rows.map((r) => r.vendor);
@@ -151,7 +151,7 @@ app.get("/spending-breakdown", async (req, res) => {
 });
 
 // Change intervals once using live data to: 7, 14, 31, 365 respectively.
-app.get("/subscriptions/monthly-summary", async (req, res) => {
+app.get("/api/subscriptions/monthly-summary", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT vendor, subscription_interval, ROUND(ABS(SUM(amount)), 2) AS total
@@ -173,7 +173,7 @@ app.get("/subscriptions/monthly-summary", async (req, res) => {
   }
 });
 
-app.get("/subscriptions/all", async (req, res) => {
+app.get("/api/subscriptions/all", async (req, res) => {
   const result = await pool.query(`
         SELECT id, vendor, amount, date, details, code, is_subscription, subscription_interval
         FROM transactions
@@ -182,7 +182,7 @@ app.get("/subscriptions/all", async (req, res) => {
   res.json(result.rows);
 });
 
-app.get("/incorrect", async (req, res) => {
+app.get("/api/incorrect", async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT id, vendor, amount, date, details, code, is_subscription, subscription_interval
@@ -197,7 +197,7 @@ app.get("/incorrect", async (req, res) => {
   }
 });
 
-app.post("/feedback", async (req, res) => {
+app.post("/api/feedback", async (req, res) => {
   const { vendor, amount, interval, isConfirmed } = req.body;
 
   if (!vendor || !amount || !interval || typeof isConfirmed !== "boolean") {
@@ -221,7 +221,7 @@ app.post("/feedback", async (req, res) => {
   }
 });
 
-app.get("/subscriptions", async (req, res) => {
+app.get("/api/subscriptions", async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT id, vendor, amount, date, details, code, subscription_interval
@@ -236,7 +236,7 @@ app.get("/subscriptions", async (req, res) => {
   }
 });
 
-app.post("/upload", upload.single("csvFile"), (req, res) => {
+app.post("/api/upload", upload.single("csvFile"), (req, res) => {
   const filePath = path.join(__dirname, req.file.path);
   const transactions = [];
   let detectedFormat;
