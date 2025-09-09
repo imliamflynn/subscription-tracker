@@ -70,13 +70,14 @@ const SubscriptionsDashboard = () => {
             transactions={incorrect}
             onFeedback={updateAfterFeedback}
           />
-          <SpendingBreakdown refresh={refreshFlag} />
-          <VendorCategoriser
-            refresh={refreshFlag}
-            onChange={() => setRefreshFlag((prev) => !prev)}
-          />
         </>
       )}
+
+      <SpendingBreakdown refresh={refreshFlag} />
+      <VendorCategoriser
+        refresh={refreshFlag}
+        onChange={() => setRefreshFlag((prev) => !prev)}
+      />
     </>
   );
 };
