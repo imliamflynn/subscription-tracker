@@ -14,7 +14,7 @@ const SubscriptionsDashboard = () => {
   const fetchAllTransactions = () => {
     setRefreshFlag((prev) => !prev);
 
-    fetch(`${import.meta.env.VITE_API_URL}/subscriptions/all`)
+    fetch(`/api/subscriptions/all`)
       .then((res) => res.json())
       .then((data) => {
         setAllTransactions(data);
