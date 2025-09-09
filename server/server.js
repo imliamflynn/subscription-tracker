@@ -320,7 +320,6 @@ app.listen(port, () => {
 });
 
 // Displays homepage html at root ('/'). Comment out for AWS.
-/*
 app.get("/", (request, response) => {
   fs.readFile("./index.html", "utf8", (err, html) => {
     if (err) {
@@ -329,4 +328,3 @@ app.get("/", (request, response) => {
     response.send(html);
   });
 });
-*/
