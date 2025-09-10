@@ -315,7 +315,7 @@ app.post("/api/upload", upload.single("csvFile"), (req, res) => {
     });
 });
 
-app.listen(port, () => {
+app.listen(port, '127.0.0.1', () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
