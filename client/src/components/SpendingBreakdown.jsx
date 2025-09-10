@@ -60,19 +60,21 @@ const SpendingBreakdown = ({ refresh }) => {
                 </th>
               </tr>
             </thead>
-            {transactions.map((t) => (
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm whitespace-nowrap">
-                  {t.vendor}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap">
-                  ${Math.abs(t.amount).toFixed(2)}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap">
-                  {t.date}
-                </td>
-              </tr>
-            ))}
+            <tbody>
+              {transactions.map((t) => (
+                <tr className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm whitespace-nowrap">
+                    {t.vendor}
+                  </td>
+                  <td className="px-6 py-4 text-sm whitespace-nowrap">
+                    ${Math.abs(t.amount).toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 text-sm whitespace-nowrap">
+                    {t.date}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       )}
