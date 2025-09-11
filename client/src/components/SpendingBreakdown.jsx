@@ -30,7 +30,6 @@ const SpendingBreakdown = ({ refresh }) => {
 
     const formattedTxns = txns.map((t) => ({
       ...t,
-      date: format(new Date(t.date), "dd/MM/yyyy"), // Format date to dd/MM/yyyy
     }));
 
     setTransactions(formattedTxns);
@@ -55,22 +54,16 @@ const SpendingBreakdown = ({ refresh }) => {
                 <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
                   Amount
                 </th>
-                <th className="w-1/3 px-6 py-3 text-left text-xs font-bold tracking-wider uppercase">
-                  Date
-                </th>
               </tr>
             </thead>
             <tbody>
               {transactions.map((t) => (
-                <tr className="hover:bg-gray-50">
+                <tr key={t.vendor} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm whitespace-nowrap">
                     {t.vendor}
                   </td>
                   <td className="px-6 py-4 text-sm whitespace-nowrap">
-                    ${Math.abs(t.amount).toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-sm whitespace-nowrap">
-                    {t.date}
+                    ${Math.abs(t.total_amount).toFixed(2)}
                   </td>
                 </tr>
               ))}

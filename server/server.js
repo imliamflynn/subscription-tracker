@@ -24,10 +24,11 @@ app.get("/api/transactions-by-category/:category", async (req, res) => {
   const { category } = req.params;
   try {
     const result = await pool.query(
-      `SELECT id, vendor, amount, date
+      `SELECT vendor, SUM(amount) AS total_amount
              FROM transactions
              WHERE category = $1
-             ORDER BY date DESC`,
+             GROUP BY vendor
+             ORDER BY total_amount ASC`,
       [category]
     );
     res.json(result.rows);
@@ -315,7 +316,7 @@ app.post("/api/upload", upload.single("csvFile"), (req, res) => {
     });
 });
 
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, "127.0.0.1", () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
